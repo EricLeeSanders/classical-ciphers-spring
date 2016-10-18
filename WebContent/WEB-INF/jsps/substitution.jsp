@@ -42,6 +42,9 @@
         <button type="submit" id="decrypt" name="cipherDirection" value="DECRYPT">Decrypt</button>
         <input type="button" id="clear-ciphers" value = "Clear">
      </sf:form>
+     <form action="<c:url value="/randomsubstitution" />" method="GET">
+        <button type="submit" id="random-example" name="random-example" value="RandomExample">Random Example</button>
+	 </form>
      </div>
     </div>
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.1.min.js"></script>

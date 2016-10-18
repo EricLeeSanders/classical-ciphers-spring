@@ -110,7 +110,34 @@ public class CipherController {
 		return "shift";
 	}
 	
+	@RequestMapping(value="/randomaffine")
+	public String randomAffineCipher(Model model){
+		System.out.println("random affine");
+		AffineVO affineVO = randomCipherService.getRandomAffine();
+		affineVO.setValidShiftsA(cipherService.getAffineValidShiftsA());
+		affineVO.setValidShiftsB(cipherService.getAffineValidShiftsB());
+		model.addAttribute("affine",affineVO);
+		System.out.println(affineVO.getPlainText());
+		return "affine";
+	}
 	
+	@RequestMapping(value="/randomsubstitution")
+	public String randomSubstitutionCipher(Model model){
+		System.out.println("random substitution");
+		SubstitutionVO substitutionVO = randomCipherService.getRandomSubstitution();
+		model.addAttribute("substitution",substitutionVO);
+		System.out.println(substitutionVO.getPlainText());
+		return "substitution";
+	}
+	
+	@RequestMapping(value="/randomvigenere")
+	public String randomVigenereCipher(Model model){
+		System.out.println("random vigenere");
+		VigenereVO vigenereVO = randomCipherService.getRandomVigenere();
+		model.addAttribute("vigenere",vigenereVO);
+		System.out.println(vigenereVO.getPlainText());
+		return "vigenere";
+	}
 	
 	
 }

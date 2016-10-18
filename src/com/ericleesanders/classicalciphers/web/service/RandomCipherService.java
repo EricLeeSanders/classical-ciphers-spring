@@ -13,6 +13,7 @@ import com.ericleesanders.classicalciphers.web.model.AffineVO;
 import com.ericleesanders.classicalciphers.web.model.ShiftVO;
 import com.ericleesanders.classicalciphers.web.model.SubstitutionVO;
 import com.ericleesanders.classicalciphers.web.model.VigenereVO;
+import com.ericleesanders.classicalciphers.web.service.CipherService.CipherDirection;
 
 @Service("randomCipherService")
 public class RandomCipherService {
@@ -24,6 +25,18 @@ public class RandomCipherService {
 	}
 	
 	public ShiftVO getRandomShift(){	
-		return cipherDao.getRandShift();
+		return cipherDao.getRandomShift();
+	}
+	
+	public AffineVO getRandomAffine(){
+		return cipherDao.getRandomAffine();
+	}
+	
+	public SubstitutionVO getRandomSubstitution(){
+		return cipherDao.getRandomSubstitution();
+	}
+	
+	public VigenereVO getRandomVigenere(){
+		return cipherDao.getRandomVigenere();
 	}
 }

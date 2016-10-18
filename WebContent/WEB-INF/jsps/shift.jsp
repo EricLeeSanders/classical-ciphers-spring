@@ -47,9 +47,8 @@
         <button type="submit" id="auto-decrypt" name="cipherDirection" value="AUTODECRYPT">Auto Decrypt</button>
         <input type="button" id="clear-ciphers" value = "Clear">
      </sf:form>
-     <input type="button"  onclick="${pageContext.request.contextPath}/randomshift" value="Randomshift">
-    <form action="<c:url value="/randomshift" />" method="GET">
-   		<input type="submit" name="action" value="Random" />
+     <form action="<c:url value="/randomshift" />" method="GET">
+        <button type="submit" id="random-example" name="random-example" value="RandomExample">Random Example</button>
 	 </form>
      </div>
     </div>
