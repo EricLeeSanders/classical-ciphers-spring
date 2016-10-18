@@ -1,0 +1,77 @@
+@CHARSET "ISO-8859-1";
+html {	
+	height: 100%;
+}
+
+body {
+	height: 100%;
+    margin:0px;
+}
+nav {
+    float:left;
+    height:100%;
+    background-color: black;
+    width:200px;
+    position: absolute;
+    color:#FFF;
+}
+
+nav li {
+    list-style-type: none;
+    margin-left: 0px; 
+    margin-top:10px;
+}
+
+nav a[href]{
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: -1px;
+    text-decoration: none
+}
+/*Hide checkbox*/
+input[type=checkbox]{
+    display: none;
+}
+
+input[type=checkbox]:checked ~ .menu{
+    display: inline-block;
+}
+
+a, a:visited{
+     color: white;
+}
+.menu {
+    margin: 0px;
+    padding-left:20px;
+    text-align:left;
+
+}
+#main-content{
+    margin-left:250px;
+    width: 600px;
+    height: 500px;
+    display: inline-block;
+}
+#cipher-input{
+	margin-top: 50px;
+	margin-left:25px;
+	text-align:left;
+}
+#plain-text {
+	display:inline-block;
+	width:550px;
+	height:100px;
+    margin-bottom: 25px;
+}
+
+#cipher-text {
+	display:inline-block;
+	width:550px;
+	height:100px;
+    margin-bottom:25px;
+}
+
+#submit {
+	margin-top:10px;
+}
+
