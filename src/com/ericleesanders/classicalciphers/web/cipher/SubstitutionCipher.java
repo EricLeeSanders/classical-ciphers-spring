@@ -6,7 +6,11 @@ package com.ericleesanders.classicalciphers.web.cipher;
  * Can perform Substitution encryption and decryption
  */
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SubstitutionCipher {
 	/**
@@ -18,55 +22,28 @@ public class SubstitutionCipher {
 	private static char[] createCipherAlphabet(String key) {
 		char[] keyArray = new char[key.length()];
 		keyArray = key.toCharArray();
-
-		ArrayList<Character> tempList = new ArrayList<Character>();
-
-		// remove repetitive characters from the key and put them into the temp
-		// list
-		boolean inKey = false;
-		for (int i = 0; i < key.length(); i++) {
-			inKey = false;
-			for (int j = 0; j < tempList.size(); j++) {
-				if (tempList.indexOf(keyArray[i]) != -1) {
-					inKey = true;
-					break;
-				}
-			}
-			if (inKey == false) {
-				tempList.add(keyArray[i]);
-			}
+		
+		Set<Character> subAlphabet = new LinkedHashSet<Character>();
+		//Start by adding the characters in the key to the subAlphabet
+		for(char letter : keyArray){
+			subAlphabet.add(letter);
 		}
-		int columnSize = tempList.size();
-		// Add the rest of the alphabet to the temp list
-		inKey = false;
-		char letter;
+		
+		// Get the number of columns
+		int numOfColumns = subAlphabet.size();
+		// Add the rest of the alphabet to the key list
 		for (int i = 0; i < 26; i++) {
-			inKey = false;
-			letter = (char) (i + 'A');
-			for (int j = 0; j < keyArray.length; j++) {
-				if (key.indexOf(letter) != -1) {
-					inKey = true;
-					break;
-				}
-			}
-			if (inKey == false) {
-				tempList.add(letter);
-			}
+			char letter = (char) (i + 'A');
+			subAlphabet.add(letter);
 		}
-
-		// We need to take the size of the keyword after removing repetitive
-		// characters and use it to make the imaginary columns
-		List<Character> cipherList = new ArrayList<Character>();
-		boolean newLine = false;
-		for (int i = 0, j = 0; i < columnSize; i++) {
+		Character [] subAlphabetArr = subAlphabet.toArray(new Character[26]);
+		// We need to take the size of the keyword and use it to make the imaginary columns
+		List<Character> cipherList = new ArrayList<Character>(26);
+		for (int i = 0, j = 0; i < numOfColumns; i++) {
 			j = i;
-			newLine = false;
-			while (newLine == false) {
-				cipherList.add(tempList.get(j));
-				j += columnSize;
-				if (j >= 26) {
-					newLine = true;
-				}
+			while (j < 26) {
+				cipherList.add(subAlphabetArr[j]);
+				j += numOfColumns;
 			}
 
 		}

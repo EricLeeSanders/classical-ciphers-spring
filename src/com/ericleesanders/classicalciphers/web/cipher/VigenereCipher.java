@@ -272,17 +272,12 @@ public class VigenereCipher {
 		List<List<Character>> shiftList = new ArrayList<List<Character>>();
 
 		// break the cipher text into columns based on the key size
-		boolean newLine = false;
 		for (int i = 0, j = 0; i < keyLength; i++) {
 			shiftList.add(new ArrayList<Character>());
 			j = i;
-			newLine = false;
-			while (!newLine) {
+			while (j < cipherList.size()) {
 				shiftList.get(i).add(cipherList.get(j));
 				j += keyLength;
-				if (j >= cipherList.size()) {
-					newLine = true;
-				}
 			}
 		}
 		// use frequency analysis of each column created above to determine

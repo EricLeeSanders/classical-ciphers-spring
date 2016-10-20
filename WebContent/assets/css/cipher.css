@@ -16,6 +16,10 @@ nav {
     color:#FFF;
 }
 
+nav h2 {
+	padding-left: 5px;
+}
+
 nav li {
     list-style-type: none;
     margin-left: 0px; 
