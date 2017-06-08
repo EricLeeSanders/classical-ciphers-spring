@@ -3,318 +3,164 @@ package com.ericleesanders.classicalciphers.web.cipher;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ericleesanders.classicalciphers.web.cipher.cryptanalyses.FriedmanTest;
+import com.ericleesanders.classicalciphers.web.cipher.cryptanalyses.KasiskiTest;
+import com.ericleesanders.classicalciphers.web.cipher.cryptanalyses.SignatureTest;
+import com.ericleesanders.classicalciphers.web.cipher.util.CipherUtil;
+
 /**
- * Vigenere Cipher Class. Can perform vigenere encryption, decryption, and auto
+ * Vigenere Cipher Class. Can perform Vigenere encryption, decryption, and auto
  * decryption
  * 
  * @author Eric
  *
  */
 public class VigenereCipher {
-	private static final double IC_UPPER_BOUND = 0.065;
-	private static final double IC_LOWER_BOUND = 0.0385;
 
 	/**
-	 * Performs a vigenere encryption
+	 * Performs a Vigenere encryption
 	 * 
 	 * @param plainText
 	 * @param key
 	 * @return String - Encrypted text
 	 */
 	public static String encrypt(String plainText, String key) {
-		validate(plainText, key);
-		plainText = plainText.toUpperCase();
-		plainText = plainText.replaceAll("[^A-Z]", "");
-		key = key.toUpperCase();
-		key = key.replaceAll("[^A-Z]", "");
-		char[] keyArray = key.toCharArray();
-		char[] textArray = plainText.toCharArray();
-		char[] cipherArray = new char[plainText.length()];
-		for (int i = 0, keyPos = 0, shift = 0; i < textArray.length; i++, keyPos++) {
-			keyPos %= key.length();// Store the position that we are in
-									// in the keyArray. Wrap to the beginning
-			shift = (keyArray[keyPos]);// Get the number that represents
-										// the letter in the key
-			shift -= 'A';// Subtract the shift by A so we are dealing
-							// with 0-25 not ASCII Numbers.
-			cipherArray[i] = (char) ((shift + textArray[i]));
-			// Wrap if need be
-			if (cipherArray[i] > 'Z') {
-				cipherArray[i] -= 26;
+
+		List<Character> keyList = CipherUtil.convertStringToCharacterList(key);
+		List<Character> plainTextList = CipherUtil.convertStringToCharacterList(plainText);
+		List<Character> cipherTextList = new ArrayList<Character>(); 
+		
+		for (int i = 0, keyPos = 0; i < plainTextList.size(); i++, keyPos++) {
+			
+			keyPos %= key.length();
+			int shift = keyList.get(keyPos);
+			// Substract the shift by A so we are dealing 
+			// with 0-25 and not ASCII values
+			shift -= 'A';
+			
+			Character shiftedChar = (char) (shift + plainTextList.get(i));
+			if (shiftedChar > 'Z') {
+				shiftedChar = (char) (shiftedChar - CipherUtil.NUM_OF_CHARS);
 			}
+			cipherTextList.add(shiftedChar);
 		}
-		String cipherText = new String(cipherArray);
+		
+		String cipherText = CipherUtil.convertCharacterListToString(cipherTextList);
 		return cipherText;
 	}
 
 	/**
-	 * Performs a vigenere decryption
+	 * Performs a Vigenere decryption
 	 * 
 	 * @param cipherText
 	 * @param key
 	 * @return String - Decrypted text
 	 */
 	public static String decrypt(String cipherText, String key) {
-		validate(cipherText, key);
-		cipherText = cipherText.toUpperCase();
-		cipherText = cipherText.replaceAll("[^A-Z]", "");
-		key = key.toUpperCase();
-		key = key.replaceAll("[^A-Z]", "");
-		int shift = 0;
-		char[] keyArray = key.toCharArray();
-		char[] textArray = cipherText.toCharArray();
-		char[] cipherArray = new char[cipherText.length()];
-		for (int i = 0, keyPos = 0; i < textArray.length; i++, keyPos++) {
+
+		List<Character> keyList = CipherUtil.convertStringToCharacterList(key);
+		List<Character> cipherTextList = CipherUtil.convertStringToCharacterList(cipherText);
+		List<Character> plainTextList = new ArrayList<Character>(); 
+		
+		for (int i = 0, keyPos = 0; i < cipherTextList.size(); i++, keyPos++) {
+			
 			keyPos %= key.length();
-			shift = (keyArray[keyPos]);
+			int shift = (keyList.get(keyPos));
 			shift -= 'A';
-			cipherArray[i] = (char) (textArray[i] - shift);
-			// Wrap if need be
-			if (cipherArray[i] < 'A') {
-				cipherArray[i] += 26;
+			
+			Character shiftedChar = (char) ((cipherTextList.get(i) - shift));
+			if (shiftedChar < 'A') {
+				shiftedChar = (char) (shiftedChar + CipherUtil.NUM_OF_CHARS);
 			}
+			plainTextList.add(shiftedChar);
 		}
-		String plainText = new String(cipherArray);
+		
+		String plainText = CipherUtil.convertCharacterListToString(plainTextList);
 		return plainText;
 	}
+	
+	public static String autoDecrypt(String cipherText){
 
-	/**
-	 * Auto decrypts a vigenere encryption
-	 * 
-	 * @param cipherText
-	 * @return String - key
-	 */
-	public static String autoDecrypt(String cipherText) {
-		validateMessage(cipherText);
-		cipherText = cipherText.toUpperCase();
-		cipherText = cipherText.replaceAll("[^A-Z]", "");
-		char[] cipherArray = cipherText.toCharArray();
-		//Friedman's guess for the key length
-		double friedmanKeyLength = friedmanTest(cipherArray); 
-		
-		List<Integer> kasiskiKeyLength = kasiskiTest(cipherText);
-		String key;
-		if (kasiskiKeyLength != null) {
-			int keyLength = diffFriedmanKasiski(friedmanKeyLength, kasiskiKeyLength);
-			key = determineKey(cipherArray, keyLength);
-		} else {
-			friedmanKeyLength = Math.round(friedmanKeyLength);
-			key = determineKey(cipherArray, (int) friedmanKeyLength);
+		List<Character> cipherTextList = CipherUtil.convertStringToCharacterList(cipherText);
+
+		double friedmanKeyLength = FriedmanTest.friedmanTest(cipherTextList);
+		System.out.println("friedmanKeyLength=" + friedmanKeyLength);
+		if (friedmanKeyLength > 50) {
+			friedmanKeyLength = 10;
 		}
+		int signatureTestKeyLength = SignatureTest.signatureTest(cipherTextList, (int) friedmanKeyLength * 2);
+		List<Integer> kasiskiKeyLengths = KasiskiTest.kasiskiTest(cipherText);
+		System.out.println("signatureTestKeyLength=" + signatureTestKeyLength);
+		System.out.println("kasiskiKeyLengths=" + kasiskiKeyLengths);
+		int keyLength = 1;
+		if (signatureTestKeyLength > 1) {
+			keyLength = determineKeywordLength(signatureTestKeyLength, kasiskiKeyLengths);
+		}
+		System.out.println("keylength = " + keyLength);
+		String key = determineKey(cipherTextList, keyLength);
+		// System.out.println("key=" + key);
 
 		return key;
 
 	}
-
-	/**
-	 * Performs the Friedman test for auto decryption
-	 * 
-	 * @param cipherArray
-	 * @return double - calculated key length
-	 */
-	private static double friedmanTest(char[] cipherArray) {
-		double ic = calculateIC(cipherArray);
-		return calculateKeyLength(cipherArray, ic);
-	}
-
-	/**
-	 * Count the number of times each character in the alphabet is used
-	 * 
-	 * @param cipherArray
-	 * @return double []
-	 */
-	private static double[] getCharCount(char[] cipherArray) {
-		double[] charCount = new double[26];
-		for (char letter : cipherArray) {
-			charCount[letter - 'A']++;
+	
+	private static int determineKeywordLength(int signatureTestGuess, List<Integer> kasiskiGuess){
+		
+		if(kasiskiGuess.isEmpty()){
+			return signatureTestGuess;
 		}
-		return charCount;
-	}
-
-	/**
-	 * Calculates the index of coincidence IC = the sum of letter(i) *
-	 * letter(i)-1 / text length * text length-1
-	 * 
-	 * @param cipherArray
-	 * @return
-	 */
-	private static double calculateIC(char[] cipherArray) {
-		double sum = 0;
-		double[] charCount = getCharCount(cipherArray);
-		// sum of letter(i) * letter(i)-1
-		for (int i = 0; i < 26; i++) {
-			sum += (charCount[i] * (charCount[i] - 1));
-		}
-		// Denominator = text length * text length-1
-		double denominator = (double) cipherArray.length * (cipherArray.length - 1);
-		double ic = sum / denominator;
-		return ic;
-	}
-
-	/**
-	 * Calculates the key length. Used for Friedman test.
-	 * 
-	 * @param cipherArray
-	 * @param ic
-	 * @return double - keyLength
-	 */
-	private static double calculateKeyLength(char[] cipherArray, double ic) {
-		int n = cipherArray.length;
-		double numerator = (IC_UPPER_BOUND - IC_LOWER_BOUND) * n;
-		double denominator = (IC_UPPER_BOUND - ic) + (n * (ic - IC_LOWER_BOUND));
-		double keyLength = Math.abs(numerator / denominator);
-		return keyLength;
-	}
-
-	/**
-	 * Performs the Kasiski test for auto decryption
-	 * 
-	 * @param cipherText
-	 * @return List<Integer> - possible key lengths
-	 */
-	public static List<Integer> kasiskiTest(String cipherText) {
-		List<Integer> keyLengths = repetitiveString(cipherText);
-		return keyLengths;
-	}
-
-	/**
-	 * Find repetitive strings for the Kasiski test. Divides the text into 3
-	 * character substrings and finds the number of occurrences for each. The
-	 * factors for the minimum distance that occurs more than once are
-	 * determined and returned.
-	 * 
-	 * @param cipherText
-	 * @return List<Integer> - list of factors
-	 *
-	 */
-	private static List<Integer> repetitiveString(String cipherText) {
-		List<Integer> distances = new ArrayList<Integer>();
-		for (int i = 0; i < cipherText.length() - 3; i++) {
-			String sub = cipherText.substring(i, i + 3);
-			int numOfOccurrences = 0;
-			int prevOccurrence = 0;
-			for (int index = cipherText.indexOf(sub); index >= 0; index = cipherText.indexOf(sub, index + 1)) {
-				if (numOfOccurrences > 0) { // has to occur more than once
-					distances.add(index - prevOccurrence);
-				}
-				prevOccurrence = index;
-				numOfOccurrences++;
-			}
-		}
-		if (distances.size() <= 0) {
-			return null;
-		}
-		int minDistance = distances.get(0);
-		for (int i = 1; i < distances.size(); i++) {
-			if ((distances.get(i) != 1) && (distances.get(i) < minDistance)) {
-				minDistance = distances.get(i);
-			}
-		}
-		List<Integer> factors = calculateFactors(minDistance);
-		return factors;
-	}
-
-	/**
-	 * Calculates the factors for a given integer n
-	 * 
-	 * @param n
-	 * @return List<Integer> - factors
-	 */
-	public static List<Integer> calculateFactors(int n) {
-		List<Integer> factors = new ArrayList<Integer>();
-		for (int i = 1, b = 0; i <= n; i++) {
-			b = n % i;
-			if (b == 0) {
-				factors.add(i);
-			}
-		}
-		return factors;
-	}
-
-	/**
-	 * Find the difference between Friedman's key length guess and Kasiski's key
-	 * length guess to help determine which is the actual key length of the
-	 * encrypted text
-	 * 
-	 * @param fKey
-	 * @param kKey
-	 * @return int - key length
-	 */
-	private static int diffFriedmanKasiski(double fKey, List<Integer> kKey) {
-		// find smallest distance between kKey and fKey
+		
+		// find smallest distance between kasiskiKey and signatureTestGuess
 		double min = Integer.MAX_VALUE;
-		int pos = 0;
-		double diff = 0;
-		for (int i = 0; i < kKey.size(); i++) {
-			diff = Math.abs((double) kKey.get(i) - fKey);
+		int smallestPos = 0;
+		for (int i = 0; i < kasiskiGuess.size(); i++) {
+			double diff = Math.abs((double) kasiskiGuess.get(i) - signatureTestGuess);
 			if (diff < min) {
-				pos = i;
+				smallestPos = i;
 				min = diff;
 			}
 		}
-		return kKey.get(pos);
+		return kasiskiGuess.get(smallestPos);
 	}
-
+	
 	/**
 	 * Guesses what the key is by utilizing frequency analysis in the shift auto
 	 * decryption
 	 * 
-	 * @param cipherArray
+	 * @param cipherText
 	 * @param keyLength
 	 * @return String - key
 	 */
-	private static String determineKey(char[] cipherArray, int keyLength) {
+	private static String determineKey(List<Character> cipherText, int keyLength) {
 
-		List<Character> cipherList = new ArrayList<Character>();
-		for (char c : cipherArray) {
-			cipherList.add(c);
-		}
-		List<List<Character>> shiftList = new ArrayList<List<Character>>();
+		List<List<Character>> cosets = new ArrayList<List<Character>>();
 
-		// break the cipher text into columns based on the key size
-		for (int i = 0, j = 0; i < keyLength; i++) {
-			shiftList.add(new ArrayList<Character>());
-			j = i;
-			while (j < cipherList.size()) {
-				shiftList.get(i).add(cipherList.get(j));
-				j += keyLength;
+		// break the cipher text into cosets based on the key size
+		for (int i = 0; i < keyLength; i++) {
+			
+			List<Character> coset = new ArrayList<Character>();
+			for(int charPos = i; charPos < cipherText.size(); charPos += keyLength){
+				coset.add(cipherText.get(charPos));
 			}
+			cosets.add(coset);
 		}
-		// use frequency analysis of each column created above to determine
+		
+		// use frequency analysis of each coset created above to determine
 		// the best shift for each letter in the key
-		int[] shiftAmountArray = new int[shiftList.size()];
-		for (int i = 0; i < shiftAmountArray.length; i++) {
-			shiftAmountArray[i] = ShiftCipher.autoDecrypt(shiftList.get(i).toString()) % 26;
+		List<Integer> shiftAmounts = new ArrayList<Integer>();
+		for (int i = 0; i < cosets.size(); i++) {
+			int shift = ShiftCipher.autoDecrypt(CipherUtil.convertCharacterListToString(cosets.get(i))) % CipherUtil.NUM_OF_CHARS;
+			shiftAmounts.add(shift);
 		}
-		char[] keyArray = new char[shiftList.size()];
-		for (int i = 0; i < keyArray.length; i++) {
-			keyArray[i] = (char) (shiftAmountArray[i] + 'A');
+		
+		List<Character> keyList = new ArrayList<Character>();
+		for (int i = 0; i < cosets.size(); i++) {
+			Character c = (char) (shiftAmounts.get(i) + 'A');
+			keyList.add(c);
 		}
-		String key = new String(keyArray);
+		
+		String key = CipherUtil.convertCharacterListToString(keyList);
 		return key;
 	}
 
-	/**
-	 * Validates a message
-	 * 
-	 * @param message
-	 */
-	private static void validateMessage(String message) {
-		if (message == null || message.trim().isEmpty()) {
-			throw new IllegalArgumentException("User did not enter a message to encrypt/decrypt");
-		}
-	}
-
-	/**
-	 * Validates a message and key
-	 * 
-	 * @param message
-	 * @param key
-	 */
-	private static void validate(String message, String key) {
-		validateMessage(message);
-		if (key == null || key.trim().isEmpty()) {
-			throw new IllegalArgumentException("User did not enter a key");
-		}
-	}
 }

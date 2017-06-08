@@ -6,55 +6,13 @@ package com.ericleesanders.classicalciphers.web.cipher;
  * Can perform Substitution encryption and decryption
  */
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.ericleesanders.classicalciphers.web.cipher.util.CipherUtil;
+
 public class SubstitutionCipher {
-	/**
-	 * Creates the cipher alphabet with a given key.
-	 * 
-	 * @param key
-	 * @return char[] - the cipher alphabet
-	 */
-	private static char[] createCipherAlphabet(String key) {
-		char[] keyArray = new char[key.length()];
-		keyArray = key.toCharArray();
-		
-		Set<Character> subAlphabet = new LinkedHashSet<Character>();
-		//Start by adding the characters in the key to the subAlphabet
-		for(char letter : keyArray){
-			subAlphabet.add(letter);
-		}
-		
-		// Get the number of columns
-		int numOfColumns = subAlphabet.size();
-		// Add the rest of the alphabet to the key list
-		for (int i = 0; i < 26; i++) {
-			char letter = (char) (i + 'A');
-			subAlphabet.add(letter);
-		}
-		Character [] subAlphabetArr = subAlphabet.toArray(new Character[26]);
-		// We need to take the size of the keyword and use it to make the imaginary columns
-		List<Character> cipherList = new ArrayList<Character>(26);
-		for (int i = 0, j = 0; i < numOfColumns; i++) {
-			j = i;
-			while (j < 26) {
-				cipherList.add(subAlphabetArr[j]);
-				j += numOfColumns;
-			}
-
-		}
-		// convert to array
-		char[] cipherAlphabet = new char[26];
-		for (int i = 0; i < 26; i++) {
-			cipherAlphabet[i] = cipherList.get(i);
-		}
-
-		return cipherAlphabet;
-	}
 
 	/**
 	 * Performs a substitution encryption
@@ -64,21 +22,17 @@ public class SubstitutionCipher {
 	 * @return String - The encrypted text
 	 */
 	public static String encrypt(String plainText, String key) {
-		validate(plainText, key);
-		plainText = plainText.toUpperCase();
-		plainText = plainText.replaceAll("[^A-Z]", "");
-		char[] plainTextArray = plainText.toCharArray();
-		key = key.toUpperCase();
-		key = key.replaceAll("[^A-Z]", "");
 
-		char[] cipherAlphabet = createCipherAlphabet(key);
-		char[] cipherArray = new char[plainTextArray.length];
-		for (int i = 0, pos = 0; i < plainTextArray.length; i++) {
-			pos = (plainTextArray[i]) - 'A';
-			cipherArray[i] = cipherAlphabet[pos];
+		List<Character> plainTextList = CipherUtil.convertStringToCharacterList(plainText);
+		List<Character> cipherAlphabet = createCipherAlphabet(key);
+		List<Character> cipherTextList = new ArrayList<Character>();
+		
+		for (int i = 0; i < plainTextList.size(); i++) {
+			int pos = (plainTextList.get(i)) - 'A';
+			cipherTextList.add(cipherAlphabet.get(pos));
 		}
 
-		String cipherText = new String(cipherArray);
+		String cipherText = CipherUtil.convertCharacterListToString(cipherTextList);
 		return cipherText;
 	}
 
@@ -90,41 +44,55 @@ public class SubstitutionCipher {
 	 * @return String - the decrypted text
 	 */
 	public static String decrypt(String cipherText, String key) {
-		validate(cipherText, key);
-		cipherText = cipherText.toUpperCase();
-		cipherText = cipherText.replaceAll("[^A-Z]", "");
-		char[] cipherTextArray = cipherText.toCharArray();
-		key = key.toUpperCase();
-		key = key.replaceAll("[^A-Z]", "");
-
-		char[] englishAlphabet = new char[26];
-		for (int i = 0; i < 26; i++) {
-			englishAlphabet[i] = (char) ('A' + i);
+		
+		List<Character> cipherTextList = CipherUtil.convertStringToCharacterList(cipherText);
+		List<Character> englishAlphabet = CipherUtil.convertStringToCharacterList("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		String cipherString = CipherUtil.convertCharacterListToString(createCipherAlphabet(key));
+		List<Character> plainTextList = new ArrayList<Character>();
+		
+		for (int i = 0; i < cipherTextList.size(); i++) {
+			int pos = cipherString.indexOf(cipherTextList.get(i));
+			plainTextList.add(englishAlphabet.get(pos));
 		}
 
-		String cipherString = new String(createCipherAlphabet(key));
-		char[] plainTextArray = new char[cipherTextArray.length];
-		for (int i = 0, pos = 0; i < cipherTextArray.length; i++) {
-			pos = cipherString.indexOf(cipherTextArray[i]);
-			plainTextArray[i] = englishAlphabet[pos];
-		}
-
-		String plainText = new String(plainTextArray);
+		String plainText = CipherUtil.convertCharacterListToString(plainTextList);
 		return plainText;
 	}
-
+	
+	
 	/**
-	 * Validates a message and key
+	 * Creates the cipher alphabet with a given key.
 	 * 
-	 * @param message
 	 * @param key
+	 * @return List<Character> - the cipher alphabet
 	 */
-	private static void validate(String message, String key) {
-		if (message == null || message.trim().isEmpty()) {
-			throw new IllegalArgumentException("User did not enter a message to encrypt/decrypt");
+	private static List<Character> createCipherAlphabet(String key) {
+		
+		Set<Character> substitutionAlphabet = new LinkedHashSet<Character>(CipherUtil.convertStringToCharacterList(key));
+
+		int numOfColumns = substitutionAlphabet.size();
+		
+		// Add the rest of the alphabet to the key list
+		for (int i = 0; i < CipherUtil.NUM_OF_CHARS; i++) {
+			Character letter = (char) (i + 'A');
+			if(!substitutionAlphabet.contains(letter)){
+				substitutionAlphabet.add(letter);	
+			}
 		}
-		if (key == null || key.trim().isEmpty()) {
-			throw new IllegalArgumentException("User did not enter a key");
+		
+		System.out.println(substitutionAlphabet);
+		
+		List<Character> subAlphabetList = new ArrayList<Character>(substitutionAlphabet);
+		
+		// We need to take the size of the keyword and use it to make the imaginary columns
+		List<Character> cipherAlphabetList = new ArrayList<Character>(CipherUtil.NUM_OF_CHARS);
+		for (int i = 0; i < numOfColumns; i++) {
+			for(int j = i; j < CipherUtil.NUM_OF_CHARS; j += numOfColumns){
+				cipherAlphabetList.add(subAlphabetList.get(j));
+			}
 		}
+
+		return cipherAlphabetList;
 	}
+
 }

@@ -1,143 +1,45 @@
 package com.ericleesanders.classicalciphers.web.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 
-import com.ericleesanders.classicalciphers.web.model.AffineVO;
-import com.ericleesanders.classicalciphers.web.model.ShiftVO;
-import com.ericleesanders.classicalciphers.web.model.SubstitutionVO;
-import com.ericleesanders.classicalciphers.web.model.VigenereVO;
-import com.ericleesanders.classicalciphers.web.service.CipherService;
-import com.ericleesanders.classicalciphers.web.service.CipherService.CipherDirection;
-import com.ericleesanders.classicalciphers.web.service.RandomCipherService;
+import com.ericleesanders.classicalciphers.web.dto.cipher.CipherTextDTO;
+import com.ericleesanders.classicalciphers.web.dto.cipher.PlainTextDTO;
+import com.ericleesanders.classicalciphers.web.exception.InvalidRequestException;
 
-@Controller
-public class CipherController {
-	
-	private CipherService cipherService;
-	private RandomCipherService randomCipherService;
-	
-	@Autowired
-	public void setCipherService(CipherService cipherService) {
-		this.cipherService = cipherService;
-	}
-	
-	@Autowired
-	public void setRandomCipherService(RandomCipherService randomCipherService) {
-		this.randomCipherService = randomCipherService;
-	}
-	
-	//Models scope is the request
-	@RequestMapping(value={"","/","/shift"})
-	public String showShift(Model model){
-			ShiftVO shiftVO = new ShiftVO();
-			shiftVO.setValidShifts(cipherService.getShiftValidShifts());
-			model.addAttribute("shift",shiftVO);
-			return "shift";
-	}
-	@RequestMapping(value={"/affine"})
-	public String showAffine(Model model){
-			AffineVO affineVO = new AffineVO();
-			affineVO.setValidShiftsA(cipherService.getAffineValidShiftsA());
-			affineVO.setValidShiftsB(cipherService.getAffineValidShiftsB());
-			model.addAttribute("affine",affineVO);
-			return "affine";
-	}
-	
-	@RequestMapping(value={"/substitution"})
-	public String showSubstitution(Model model){
-			return "substitution";
-	}
-	
-	@RequestMapping(value={"/vigenere"})
-	public String showVigenere(Model model){
-			return "vigenere";
-	}
+public interface CipherController<T> {
 
+	CipherTextDTO encrypt(T cipherDTO,
+			 			  BindingResult cipherBindingResult,
+						  PlainTextDTO plainTextDTO,
+						  BindingResult plainTextBindingResult,
+						  HttpServletRequest request,
+						  HttpServletResponse response);
 	
-	@RequestMapping(value="/shift", method=RequestMethod.POST)
-	public String shiftCipher(ShiftVO shiftVO
-						, @RequestParam("cipherDirection") String cipherDirection
-						, Model model) {
-		cipherService.shift(shiftVO, CipherDirection.valueOf(cipherDirection));
-		shiftVO.setValidShifts(cipherService.getShiftValidShifts());
-		model.addAttribute("shift",shiftVO);
-		return "shift";
+	PlainTextDTO decrypt(T cipherDTO,
+			  BindingResult cipherBindingResult,
+			  CipherTextDTO cipherTextDTO,
+			  BindingResult cipherTextBindingResult,
+			  HttpServletRequest request,
+			  HttpServletResponse response);
+	
+	default public void checkForErrors(BindingResult... bindingResults){
+		
+		List<Errors> errors = new ArrayList<Errors>();
+		for(BindingResult br : bindingResults){
+			if(br.hasErrors()){
+				errors.add(br);
+			}
+		}
+		
+		if(errors.size() > 0){
+			throw new InvalidRequestException("Error processing form...", errors.toArray(new Errors[errors.size()]));
+		}
 	}
-	
-	@RequestMapping(value="/affine", method=RequestMethod.POST)
-	public String affineCipher(AffineVO affineVO
-						, @RequestParam("cipherDirection") String cipherDirection
-						, Model model) {
-		cipherService.affine(affineVO, CipherDirection.valueOf(cipherDirection));
-		affineVO.setValidShiftsA(cipherService.getAffineValidShiftsA());
-		affineVO.setValidShiftsB(cipherService.getAffineValidShiftsB());
-		model.addAttribute("affine",affineVO);
-		return "affine";
-	}
-	
-	@RequestMapping(value="/substitution", method=RequestMethod.POST)
-	public String substitutionCipher(SubstitutionVO substitutionVO
-						, @RequestParam("cipherDirection") String cipherDirection
-						, Model model) {
-		cipherService.substitution(substitutionVO, CipherDirection.valueOf(cipherDirection));
-		model.addAttribute("substitution",substitutionVO);
-		return "substitution";
-	}
-	
-	@RequestMapping(value="/vigenere", method=RequestMethod.POST)
-	public String vigenereCipher(VigenereVO vigenereVO
-						, @RequestParam("cipherDirection") String cipherDirection
-						, Model model) {
-		cipherService.vigenere(vigenereVO, CipherDirection.valueOf(cipherDirection));
-		model.addAttribute("vigenere",vigenereVO);
-		return "vigenere";
-	}
-	
-	@RequestMapping(value="/randomshift")
-	public String randomShiftCipher(Model model){
-		System.out.println("random shift");
-		ShiftVO shiftVO = randomCipherService.getRandomShift();
-		shiftVO.setValidShifts(cipherService.getShiftValidShifts());
-		model.addAttribute("shift",shiftVO);
-		System.out.println(shiftVO.getPlainText());
-		return "shift";
-	}
-	
-	@RequestMapping(value="/randomaffine")
-	public String randomAffineCipher(Model model){
-		System.out.println("random affine");
-		AffineVO affineVO = randomCipherService.getRandomAffine();
-		affineVO.setValidShiftsA(cipherService.getAffineValidShiftsA());
-		affineVO.setValidShiftsB(cipherService.getAffineValidShiftsB());
-		model.addAttribute("affine",affineVO);
-		System.out.println(affineVO.getPlainText());
-		return "affine";
-	}
-	
-	@RequestMapping(value="/randomsubstitution")
-	public String randomSubstitutionCipher(Model model){
-		System.out.println("random substitution");
-		SubstitutionVO substitutionVO = randomCipherService.getRandomSubstitution();
-		model.addAttribute("substitution",substitutionVO);
-		System.out.println(substitutionVO.getPlainText());
-		return "substitution";
-	}
-	
-	@RequestMapping(value="/randomvigenere")
-	public String randomVigenereCipher(Model model){
-		System.out.println("random vigenere");
-		VigenereVO vigenereVO = randomCipherService.getRandomVigenere();
-		model.addAttribute("vigenere",vigenereVO);
-		System.out.println(vigenereVO.getPlainText());
-		return "vigenere";
-	}
-	
-	
 }
