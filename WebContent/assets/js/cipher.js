@@ -18,9 +18,17 @@ $(document).ready(function() {
 		  return Math.floor(Math.random() * (max - min)) + min;
 	}
 	
+	function removeErrors(){
+    	$('.errors').empty();
+		//Remove hasError from all elements
+    	$('.has-error').removeClass('has-error');
+	}
+	
 	$('#clear').click(function(e) {
 		$('.form-control').val('');
 		$('select.form-control').prop('selectedIndex',0);
+		$('#log-output').val('');
+		removeErrors();
 	});
 	
 	$('#cipher-example').click(function(e) {
@@ -43,42 +51,49 @@ $(document).ready(function() {
 		});
 		
 	});
-	
-	$(".cipher-form").submit(function(e) {
+
+	$(".cipher-form").submit(function(event) {
+
 	    var $form = $(this);
 
 	    sanitizeTextInputs();
 	    	    
-	    var jqxhr = $.post(buildCipherPostURL(), $form.serialize(), function(response) {
+	    var jqxhr = $.get(buildCipherPostURL(), $form.serialize(), function(response) {
 	    	console.log(response);
-	    	$('.errors').empty();
-			//Remove hasError from all elements
-	    	$('.has-error').removeClass('has-error');
+	    	removeErrors();
 			if(cipherDirection === "Encrypt"){
-				$('#cipher-text').val(response.cipherText);
+				$('#cipher-text').val(response.text.text);
 			} else {
+				$('#plain-text').val(response.text.text);
 				if(cipherDirection === "AutoDecrypt") {
-					$('#plain-text').val(response.plainText.plainText);
 					var $keyInput = $('.active-key-panel .key-input');
-					$keyInput.val(response.key[$keyInput.attr('name')]);
-				} else {
-					$('#plain-text').val(response.plainText);
-				}
+					// When select dynamic value from json, it can't have a period in it.
+					// So remove cipher. and hard code cipher
+					var keyValue = $keyInput.attr('name').replace("cipher.", "");
+					$keyInput.val(response.cipher[keyValue]);
+				} 
 			}
+			$("#log-output").val(response.log);
 	    }).fail(function(errors) {
 	    	console.log(errors);
 			$('.errors').empty();
 	    	//Remove hasError from all elements
 	    	$('.has-error').removeClass('has-error');
 	    	errors.responseJSON.fieldErrors.forEach(function(error){
-	    		$('.cipher-form [name=' + error.field + ']').closest('.form-group').addClass('has-error');
+	    		// if error.field == text.text then change to text
+	    		// We do this because the name attribute for plainText and cipherText is just "text"
+	    		var field = error.field;
+	    		if(field === "text.text"){
+	    			field = "text";
+	    		}
+	    		
+	    		$('.cipher-form [name=' + escapeSelector(field) + ']:not(:disabled)').closest('.form-group').addClass('has-error');
 	    		var $li = $("<li>").text(error.message);
 	    		$('.errors').append($li);
 	    	})
 	    });
 
-	    event.preventDefault(); // Important! Prevents submitting the form.
-
+	    event.preventDefault();
 	});	
 
     $('#cipher-type-buttons > button').click(function(e) {
@@ -160,6 +175,25 @@ $(document).ready(function() {
 		$('#cipher-text').prop('disabled', cipherTextDisabled);
 		$('.active-key-panel .form-control').prop('disabled', inputDisabled);
 	}
+	
+	function escapeSelector(s){
+	    return s.replace( /(:|\.|\[|\])/g, "\\$1" );
+	}
+	
+	/* 
+	* Show more button is clicked
+	*/
+	$('.show-more span').on('click', function(){
+		var $this = $(this);
+		var $content = $this.parent().prev('.hidden-content');
+		$content.toggleClass('hide-content show-content');
+		if ($content.hasClass('hide-content')){
+			$this.text("Show Steps");
+		} else {
+			$this.text("Hide Steps");
+		}
+		event.preventDefault();
+	});
 	
 	disableControls();
 });

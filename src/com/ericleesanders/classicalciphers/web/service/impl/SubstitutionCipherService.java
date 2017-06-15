@@ -3,36 +3,36 @@ package com.ericleesanders.classicalciphers.web.service.impl;
 import org.springframework.stereotype.Service;
 
 import com.ericleesanders.classicalciphers.web.cipher.SubstitutionCipher;
-import com.ericleesanders.classicalciphers.web.dto.cipher.CipherTextDTO;
-import com.ericleesanders.classicalciphers.web.dto.cipher.PlainTextDTO;
 import com.ericleesanders.classicalciphers.web.dto.cipher.SubstitutionDTO;
+import com.ericleesanders.classicalciphers.web.dto.cipher.TextDTO;
+import com.ericleesanders.classicalciphers.web.log.Logger;
 import com.ericleesanders.classicalciphers.web.service.CipherService;
 
 @Service("substitutionCipherService")
 public class SubstitutionCipherService implements CipherService<SubstitutionDTO> {
 
 	@Override
-	public CipherTextDTO encrypt(SubstitutionDTO substitutionDTO, PlainTextDTO plainTextDTO) {
+	public TextDTO encrypt(SubstitutionDTO substitutionDTO, TextDTO plainText, Logger logger){
 		
-		String cipherText = SubstitutionCipher.encrypt(plainTextDTO.getPlainText(),substitutionDTO.getSubstitutionKey());
+		String cipherText = SubstitutionCipher.encrypt(plainText.getText(), substitutionDTO.getSubstitutionKey(), logger);
 		
-		CipherTextDTO cipherTextDTO = new CipherTextDTO(cipherText);
-		
+		TextDTO cipherTextDTO = new TextDTO(cipherText);
+				
 		return cipherTextDTO;
 	}
 
 	@Override
-	public PlainTextDTO decrypt(SubstitutionDTO substitutionDTO, CipherTextDTO cipherTextDTO) {
+	public TextDTO decrypt(SubstitutionDTO substitutionDTO, TextDTO cipherText, Logger logger){
 		
-		String plainText = SubstitutionCipher.decrypt(cipherTextDTO.getCipherText(), substitutionDTO.getSubstitutionKey());
+		String plainText = SubstitutionCipher.decrypt(cipherText.getText(), substitutionDTO.getSubstitutionKey(), logger);
 		
-		PlainTextDTO plainTextDTO = new PlainTextDTO(plainText);
-		
+		TextDTO plainTextDTO = new TextDTO(plainText);
+				
 		return plainTextDTO;
 	}
 
 	@Override
-	public SubstitutionDTO autoDecrypt(CipherTextDTO cipherTextDTO) {
+	public SubstitutionDTO autoDecrypt(TextDTO textDTO, Logger logger) {
 		throw new UnsupportedOperationException();
 	}
 

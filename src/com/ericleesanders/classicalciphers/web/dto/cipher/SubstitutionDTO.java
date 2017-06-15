@@ -20,7 +20,7 @@ public class SubstitutionDTO {
 	public void setSubstitutionKey(String substitutionKey) {
 		this.substitutionKey = substitutionKey;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "SubstitutionDTO [substitutionKey=" + substitutionKey + "]";

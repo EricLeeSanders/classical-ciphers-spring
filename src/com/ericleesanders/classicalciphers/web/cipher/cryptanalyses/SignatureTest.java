@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.ericleesanders.classicalciphers.web.cipher.util.CipherUtil;
+import com.ericleesanders.classicalciphers.web.log.Logger;
 
 public class SignatureTest {
 	
 
-	public static int signatureTest(List<Character> cipherText, int keyLengthUpperBound){
+	public static int signatureTest(List<Character> cipherText, int keyLengthUpperBound, Logger logger){
 		
 		List<Double> keyLengthProbabilities = findKeyLengthProbabilities(cipherText, keyLengthUpperBound);
-		System.out.println("keyLengthProbabilities= " + keyLengthProbabilities);
+		logger.addLine("Signature test key length probabilities: " + keyLengthProbabilities);
 		return estimateKeywordLength(keyLengthProbabilities);
 	}
 	
@@ -56,7 +57,7 @@ public class SignatureTest {
 			for(int i = 0; i < cosets.size(); i++){
 				
 				Map<Character,Integer> charOccurrences = CipherUtil.getCharCount(cosets.get(i));
-				Map<Character,Double> charFreq = CipherUtil.getCharFrequencyCount(charOccurrences, cosets.get(i).size());
+				Map<Character,Double> charFreq = CipherUtil.getCharFrequency(charOccurrences, cosets.get(i).size());
 				List<Double> charFreqValues = new ArrayList<Double>(charFreq.values());
 				
 				// Sorts ascending
@@ -99,6 +100,11 @@ public class SignatureTest {
 		return keyLengthProbabilities;
 	}
 	
+	/**
+	 * Estimates a keyword length given a list of probabilities
+	 * @param keyLengthProbabilities
+	 * @return
+	 */
 	public static int estimateKeywordLength(List<Double> keyLengthProbabilities){
 		
 		double max = 0;

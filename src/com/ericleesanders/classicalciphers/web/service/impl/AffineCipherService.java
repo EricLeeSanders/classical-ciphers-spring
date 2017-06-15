@@ -4,35 +4,35 @@ import org.springframework.stereotype.Service;
 
 import com.ericleesanders.classicalciphers.web.cipher.AffineCipher;
 import com.ericleesanders.classicalciphers.web.dto.cipher.AffineDTO;
-import com.ericleesanders.classicalciphers.web.dto.cipher.CipherTextDTO;
-import com.ericleesanders.classicalciphers.web.dto.cipher.PlainTextDTO;
+import com.ericleesanders.classicalciphers.web.dto.cipher.TextDTO;
+import com.ericleesanders.classicalciphers.web.log.Logger;
 import com.ericleesanders.classicalciphers.web.service.CipherService;
 
 @Service("affineCipherService")
 public class AffineCipherService implements CipherService<AffineDTO>{
 
 	@Override
-	public CipherTextDTO encrypt(AffineDTO affineDTO, PlainTextDTO plainTextDTO) {
+	public TextDTO encrypt(AffineDTO affineDTO, TextDTO plainText, Logger logger){
 		
-		String cipherText = AffineCipher.encrypt(plainTextDTO.getPlainText(), affineDTO.getShiftAmountA(), affineDTO.getShiftAmountB());
-
-		CipherTextDTO cipherTextDTO = new CipherTextDTO(cipherText);
+		String cipherText = AffineCipher.encrypt(plainText.getText(), affineDTO.getShiftAmountA(), affineDTO.getShiftAmountB(), logger);
+		
+		TextDTO cipherTextDTO = new TextDTO(cipherText);
 				
 		return cipherTextDTO;
 	}
-
+	
 	@Override
-	public PlainTextDTO decrypt(AffineDTO affineDTO, CipherTextDTO cipherTextDTO) {
+	public TextDTO decrypt(AffineDTO affineDTO, TextDTO cipherText, Logger logger){
 		
-		String plainText = AffineCipher.decrypt(cipherTextDTO.getCipherText(), affineDTO.getShiftAmountA(), affineDTO.getShiftAmountB());
+		String plainText = AffineCipher.decrypt(cipherText.getText(), affineDTO.getShiftAmountA(), affineDTO.getShiftAmountB(), logger);
 		
-		PlainTextDTO plainTextDTO = new PlainTextDTO(plainText);
-		
+		TextDTO plainTextDTO = new TextDTO(plainText);
+				
 		return plainTextDTO;
 	}
-
+	
 	@Override
-	public AffineDTO autoDecrypt(CipherTextDTO cipherTextDTO) {
+	public AffineDTO autoDecrypt(TextDTO cipherText, Logger logger) {
 
 		throw new UnsupportedOperationException();
 	}

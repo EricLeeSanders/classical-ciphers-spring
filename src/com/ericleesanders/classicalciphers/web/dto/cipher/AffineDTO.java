@@ -16,7 +16,7 @@ public class AffineDTO {
 	@Min(value=1, message=SHIFT_B_ERROR_MESSAGE)
 	@Max(value=26, message=SHIFT_B_ERROR_MESSAGE)
 	private int shiftAmountB;
-	
+		
 	public AffineDTO(){}
 	
 	public AffineDTO(int shiftAmountA, int shiftAmountB) {

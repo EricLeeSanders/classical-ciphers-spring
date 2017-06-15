@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ericleesanders.classicalciphers.web.cipher.util.CipherUtil;
+import com.ericleesanders.classicalciphers.web.log.Logger;
 
 /**
  * Affine Cipher Class. Can perform Affine encryption and decryption.
@@ -23,9 +24,14 @@ public class AffineCipher {
 	 * @param plainText
 	 * @param shiftAmountA
 	 * @param shiftAmountB
+	 * @param logger
 	 * @return String - The encrypted text
 	 */
-	public static String encrypt(String plainText, int shiftAmountA, int shiftAmountB) {
+	public static String encrypt(String plainText, int shiftAmountA, int shiftAmountB, Logger logger) {
+		
+		logger.addLine("Beginning affine encryption...");
+		logger.addLine("Shift amount A: " + shiftAmountA);
+		logger.addLine("Shift amount B: " + shiftAmountB);
 		
 		List<Character> plainTextList = CipherUtil.convertStringToCharacterList(plainText);
 		List<Character> cipherTextList = new ArrayList<Character>();
@@ -38,6 +44,10 @@ public class AffineCipher {
 		}
 		
 		String cipherText = CipherUtil.convertCharacterListToString(cipherTextList);
+		
+		logger.addLine("Affine encryption complete");
+		logger.addLine("Decrypted text: " + cipherText);
+		
 		return cipherText;
 	}
 
@@ -47,9 +57,14 @@ public class AffineCipher {
 	 * @param cipherText
 	 * @param shiftAmountA
 	 * @param shiftAmountB
+	 * @param logger
 	 * @return
 	 */
-	public static String decrypt(String cipherText, int shiftAmountA, int shiftAmountB) {
+	public static String decrypt(String cipherText, int shiftAmountA, int shiftAmountB, Logger logger) {
+		
+		logger.addLine("Beginning affine decryption...");
+		logger.addLine("Shift amount A: " + shiftAmountA);
+		logger.addLine("Shift amount B: " + shiftAmountB);
 
 		List<Character> cipherTextList = CipherUtil.convertStringToCharacterList(cipherText);
 		List<Character> plainTextList = new ArrayList<Character>();
@@ -72,6 +87,10 @@ public class AffineCipher {
 		}
 		
 		String plainText = CipherUtil.convertCharacterListToString(plainTextList);
+		
+		logger.addLine("Affine decryption complete");
+		logger.addLine("Decrypted text: " + plainText);
+		
 		return plainText;
 	}
 	

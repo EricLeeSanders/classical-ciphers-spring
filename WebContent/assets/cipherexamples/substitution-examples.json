@@ -1,16 +1,16 @@
 [	
 	{
-		"substitutionKey": "SNEAK",
+		"cipher.substitutionKey": "SNEAK",
 		"plainText": "I'm going to sneak into the building tonight. I'll signal when I'm in.",
 		"cipherText": "IDNQIJNRQLJUSVIJRQRCUBXIEOIJNRQJINCRIEELINJSEGCUJIDIJ"
 	},
 	{
-		"substitutionKey": "TBAG",
+		"cipher.substitutionKey": "TBAG",
 		"plainText": "Theodore Bagwell: We are captives of our own identities. Living in prisons of our own creations.",
 		"cipherText": "WBPALANPCTYKPQQKPTNPHTEWDFPRAUAGNAKZDLPZWDWDPRQDFDZYDZENDRAZRAUAGNAKZHNPTWDAZR"
 	},
 	{
-		"substitutionKey": "SPY",
+		"cipher.substitutionKey": "SPY",
 		"plainText": "They don't know that I'm spying on them.",
 		"cipherText": "CUJTGNKCBKNLCUSCXHYRTXKQNKCUJH"
 	}

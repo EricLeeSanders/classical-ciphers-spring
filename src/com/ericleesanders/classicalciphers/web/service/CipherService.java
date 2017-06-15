@@ -1,11 +1,11 @@
 package com.ericleesanders.classicalciphers.web.service;
 
-import com.ericleesanders.classicalciphers.web.dto.cipher.CipherTextDTO;
-import com.ericleesanders.classicalciphers.web.dto.cipher.PlainTextDTO;
+import com.ericleesanders.classicalciphers.web.dto.cipher.TextDTO;
+import com.ericleesanders.classicalciphers.web.log.Logger;
 
 public interface CipherService<T> {
 	
-	CipherTextDTO encrypt(T cipherDTO, PlainTextDTO plainTextDTO);
-	PlainTextDTO decrypt(T cipherDTO, CipherTextDTO cipherTextDTO);
-	T autoDecrypt(CipherTextDTO cipherTextDTO);
+	TextDTO encrypt(T cipherDTO, TextDTO plainText, Logger logger);
+	TextDTO decrypt(T cipherDTO, TextDTO cipherText, Logger logger);
+	T autoDecrypt(TextDTO cipherText, Logger logger);
 }

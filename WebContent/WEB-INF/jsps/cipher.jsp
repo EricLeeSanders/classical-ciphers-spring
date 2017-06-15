@@ -45,12 +45,12 @@
 				<div>
 					<ul class="errors"></ul>
 				</div>
-				<form class="cipher-form form-horizontal" role="form" method="post" action="">
+				<form class="cipher-form form-horizontal" role="form" method="post" action="" accept-charset="UTF-8">
 					<div class="form-group">
 						<div id="shift-key-panel" class="key-panel active-key-panel">
 							<label for="shift-amount" class="col-sm-2 control-label">Shift</label>
 							<div class="col-sm-2">
-								<select class="form-control key-input" id="shift-amount" name="shiftAmount">
+								<select class="form-control key-input" id="shift-amount" name="cipher.shiftAmount">
 							    <c:forEach var="validShift" items="${shift.validShifts}">
 										<option value="${validShift}">${validShift}</option>
 								    </c:forEach>
@@ -60,7 +60,7 @@
 						<div id="affine-key-panel" class="key-panel">
 							<label for="shift-amount-a" class="col-sm-2 control-label">Shift A</label>
 							<div class="col-sm-2">
-								<select class="form-control key-input" id="shift-amount-a" name="shiftAmountA">
+								<select class="form-control key-input" id="shift-amount-a" name="cipher.shiftAmountA">
 								    <c:forEach var="validShift" items="${affine.validShiftsA}">
 										<option value="${validShift}">${validShift}</option>
 								    </c:forEach>
@@ -68,7 +68,7 @@
 							</div>
 							<label for="shift-amount-b" class="col-sm-2 control-label">Shift B</label>
 							<div class="col-sm-2">
-								<select class="form-control key-input" id="shift-amount-b" name="shiftAmountB">
+								<select class="form-control key-input" id="shift-amount-b" name="cipher.shiftAmountB">
 								    <c:forEach var="validShift" items="${affine.validShiftsB}">
 										<option value="${validShift}">${validShift}</option>
 								    </c:forEach>
@@ -78,13 +78,15 @@
 						<div id="substitution-key-panel" class="key-panel">
 							<label for="substititon-key" class="col-sm-2 control-label">Key</label>
 							<div class="col-sm-9">
-							<textarea class="form-control key-input" rows="1" id="substititon-key" name="substitutionKey"></textarea>
+							<input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="text" 
+								class="form-control key-input" id="substititon-key" name="cipher.substitutionKey"></input>
 							</div>
 						</div>
 						<div id="vigenere-key-panel" class="key-panel">
 							<label for="vigenere-key" class="col-sm-2 control-label">Key</label>
 							<div class="col-sm-9">
-							<textarea class="form-control key-input" rows="1" id="vigenere-key" name="vigenereKey"></textarea>
+							<input autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="text" 
+								class="form-control key-input" id="vigenere-key" name="cipher.vigenereKey"></input>
 							</div>
 						</div>
 					</div>
@@ -92,13 +94,15 @@
 					<div class="form-group">
 						<label for="plain-text" class="col-sm-2 control-label">Plain Text</label>
 						<div class="col-sm-9">
-							<textarea id="plain-text" class="form-control" rows="4" name="plainText"></textarea>
+							<textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="plain-text" 
+								class="form-control" rows="4" name="text"></textarea>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="cipher-text" class="col-sm-2 control-label">Cipher Text</label>
 						<div class="col-sm-9">
-							<textarea id="cipher-text" class="form-control" rows="4" name="cipherText"></textarea>
+							<textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="cipher-text" 
+								class="form-control" rows="4" name="text"></textarea>
 						</div>
 					</div>
 					<div class="row">
@@ -111,6 +115,19 @@
 						</div>
 					</div>
 				</form> 
+				<div class="hidden-content hide-content">
+					<div id="log-panel">
+						<label id="label-log-output" for="log-output" class="col-sm-2">Steps</label>
+						<div class="col-sm-9">
+							<textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" rows="10" id="log-output"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="show-more">
+					<span>
+		                Show Steps
+		            </span>
+				</div>
             </div>
         </div>
   </div>

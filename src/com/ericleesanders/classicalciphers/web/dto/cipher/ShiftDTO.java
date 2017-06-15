@@ -11,7 +11,8 @@ public class ShiftDTO {
 	@Max(value = 26, message = ERROR_MESSAGE)
 	private int shiftAmount;
 
-	public ShiftDTO(){}
+	public ShiftDTO(){
+	}
 	
 	public ShiftDTO(int shiftAmount) {
 		this.shiftAmount = shiftAmount;
@@ -23,6 +24,10 @@ public class ShiftDTO {
 	
 	public void setShiftAmount(int shiftAmount) {
 		this.shiftAmount = shiftAmount;
+	}
+	
+	public void setCipher(int cipher){
+		this.shiftAmount = cipher;
 	}
 
 	@Override
