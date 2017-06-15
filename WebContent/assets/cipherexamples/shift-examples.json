@@ -1,0 +1,32 @@
+[	
+	{
+		"cipher.shiftAmount": "8",
+		"plainText": "Prepare the forces. We attack at midnight.",
+		"cipherText": "XZMXIZMBPMNWZKMAEMIBBIKSIBUQLVQOPB"
+	},
+	{
+		"cipher.shiftAmount": "11",
+		"plainText": "I'm going to sneak into the building tonight. I'll signal when I'm in.",
+		"cipherText": "TXRZTYREZDYPLVTYEZESPMFTWOTYREZYTRSETWWDTRYLWHSPYTXTY"
+	},
+	{
+		"cipher.shiftAmount": "23",
+		"plainText": "They don't know that I'm spying on them.",
+		"cipherText": "QEBVALKQHKLTQEXQFJPMVFKDLKQEBJ"
+	},
+	{
+		"cipher.shiftAmount": "15",
+		"plainText": "What's the wifi password?",
+		"cipherText": "LWPIHIWTLXUXEPHHLDGS"
+	},
+	{
+		"cipher.shiftAmount": "16",
+		"plainText": "Michael Scofield: I'm getting you out of here, Lincoln.",
+		"cipherText": "CYSXQUBISEVYUBTYCWUJJYDWOEKEKJEVXUHUBYDSEBD"
+	},
+	{
+		"cipher.shiftAmount": "3",
+		"plainText": "Theodore Bagwell: We are captives of our own identities. Living in prisons of our own creations.",
+		"cipherText": "WKHRGRUHEDJZHOOZHDUHFDSWLYHVRIRXURZQLGHQWLWLHVOLYLQJLQSULVRQVRIRXURZQFUHDWLRQV"
+	}
+]
