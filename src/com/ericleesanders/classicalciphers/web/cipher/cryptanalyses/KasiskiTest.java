@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ericleesanders.classicalciphers.web.cipher.util.CipherUtil;
+import com.ericleesanders.classicalciphers.web.log.Logger;
 
 public class KasiskiTest {
 	
@@ -17,20 +18,22 @@ public class KasiskiTest {
 	 * Performs the Kasiski test for auto decryption
 	 * 
 	 * @param cipherText
+	 * @param logger
 	 * @return List<Integer> - possible key lengths
 	 */
-	public static List<Integer> kasiskiTest(String cipherText) {
+	public static List<Integer> kasiskiTest(String cipherText, Logger logger) {
 		
-		List<Integer> keyLengths = findPossibleKeywordLengths(cipherText);
+		List<Integer> keyLengths = findPossibleKeywordLengths(cipherText, logger);
 		return keyLengths;
 	}
 	
 	/**
 	 * Finds possible keyword lengths for a given cipher text string.
 	 * @param cipherText
+	 * @param logger
 	 * @return
 	 */
-	public static List<Integer> findPossibleKeywordLengths(String cipherText) {
+	public static List<Integer> findPossibleKeywordLengths(String cipherText, Logger logger) {
 		
 		//Key = factor, value = num of occurrences
 		Map<Integer, Integer> factorOccurrences = new HashMap<Integer, Integer>();
@@ -76,18 +79,16 @@ public class KasiskiTest {
 		// Sort the map by value
 		LinkedHashMap<Integer, Integer> factorOccurrencesSortedByValue = CipherUtil.sortMapByValueDesc(factorOccurrences);
 		
-		System.out.println(factorOccurrencesSortedByValue);
+		logger.addLine("Kasiski test repeated occurrences: " + factorOccurrencesSortedByValue);
 						
 		// get the most common factor which is in the first position
 		List<Integer> factorsOrdered = new ArrayList<Integer>(factorOccurrencesSortedByValue.keySet());
-		//System.out.println(factorsOrdered);
 		Integer mostCommonFactor = factorsOrdered.get(0);
 		Integer mostCommonFactorOccurrence = factorOccurrences.get(mostCommonFactor);
 		
 		List<Integer> possibleKeywordLengths = new ArrayList<Integer>();
 		// Add all factors that occurred at least mostCommonFactorOccurrences * MIN_NUM_OF_OCCURRENCES_FACTOR;
 		float minNumOfOccurrencesNeeded = mostCommonFactorOccurrence * MIN_NUM_OF_OCCURRENCES_FACTOR;
-		//System.out.println("minNumOfOccurrencesNeeded=" + minNumOfOccurrencesNeeded);
 		
 		for(Integer factor : factorsOrdered){
 			Integer factorOccurrence =  factorOccurrences.get(factor);
@@ -95,9 +96,7 @@ public class KasiskiTest {
 				possibleKeywordLengths.add(factor);
 			}
 		}
-		
-		//System.out.println(possibleKeywordLengths);
-		
+
 		return possibleKeywordLengths;
 		
 	}

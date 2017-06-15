@@ -8,11 +8,11 @@ package com.ericleesanders.classicalciphers.web.cipher;
 public class FrequencyNode implements Comparable<FrequencyNode> {
 	
 	private int shift;
-	private double freq;
+	private double frequency;
 
 	public FrequencyNode(int shift, double freq) {
 		this.shift = shift;
-		this.freq = freq;
+		this.frequency = freq;
 	}
 
 	public void setShift(int shift) {
@@ -23,49 +23,49 @@ public class FrequencyNode implements Comparable<FrequencyNode> {
 		return shift;
 	}
 
-	public void setFreq(double freq) {
-		this.freq = freq;
+	public void setFrequency(double frequency) {
+		this.frequency = frequency;
 	}
 
-	public double getFreq() {
-		return freq;
+	public double getFrequency() {
+		return frequency;
 	}
 
-//	@Override
-//	public int hashCode() {
-//		final int prime = 31;
-//		int result = 1;
-//		long temp;
-//		temp = Double.doubleToLongBits(freq);
-//		result = prime * result + (int) (temp ^ (temp >>> 32));
-//		result = prime * result + shift;
-//		return result;
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		FrequencyNode other = (FrequencyNode) obj;
-//		if (Double.doubleToLongBits(freq) != Double.doubleToLongBits(other.freq))
-//			return false;
-//		if (shift != other.shift)
-//			return false;
-//		return true;
-//	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(frequency);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + shift;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FrequencyNode other = (FrequencyNode) obj;
+		if (Double.doubleToLongBits(frequency) != Double.doubleToLongBits(other.frequency))
+			return false;
+		if (shift != other.shift)
+			return false;
+		return true;
+	}
 
 	@Override
 	public int compareTo(FrequencyNode freq2) {
-		return Double.compare(this.getFreq(), freq2.getFreq());
+		return Double.compare(this.getFrequency(), freq2.getFrequency());
 	}
 
 	@Override
 	public String toString() {
-		return "FrequencyNode [shift=" + shift + ", freq=" + freq + "]";
+		return "FrequencyNode [shift=" + shift + ", frequency=" + frequency + "]";
 	}
 	
 }

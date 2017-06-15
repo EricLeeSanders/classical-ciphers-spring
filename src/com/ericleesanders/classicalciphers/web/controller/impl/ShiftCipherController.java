@@ -1,10 +1,5 @@
 package com.ericleesanders.classicalciphers.web.controller.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,61 +10,79 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ericleesanders.classicalciphers.web.controller.CipherController;
-import com.ericleesanders.classicalciphers.web.dto.cipher.CipherTextDTO;
-import com.ericleesanders.classicalciphers.web.dto.cipher.PlainTextDTO;
 import com.ericleesanders.classicalciphers.web.dto.cipher.ShiftDTO;
+import com.ericleesanders.classicalciphers.web.dto.cipher.TextDTO;
+import com.ericleesanders.classicalciphers.web.dto.request.ShiftRequestDTO;
+import com.ericleesanders.classicalciphers.web.dto.response.CipherResponseDTO;
+import com.ericleesanders.classicalciphers.web.log.CipherLogger;
+import com.ericleesanders.classicalciphers.web.log.Logger;
 import com.ericleesanders.classicalciphers.web.service.CipherService;
 
 @Controller
 @RequestMapping(value = "/shift")
-public class ShiftCipherController implements CipherController<ShiftDTO> {
+public class ShiftCipherController implements CipherController<ShiftRequestDTO, ShiftDTO> {
 
 	@Autowired
 	private CipherService<ShiftDTO> shiftCipherService;
 
 	@Override
-	@RequestMapping(value = "/encrypt", method = RequestMethod.POST)
+	@RequestMapping(value = "/encrypt", method = RequestMethod.GET)
 	@ResponseBody
-	public CipherTextDTO encrypt(@Valid ShiftDTO shiftDTO, BindingResult shiftBindingResult,
-			@Valid PlainTextDTO plainTextDTO, BindingResult plainTextBindingResult, HttpServletRequest request,
-			HttpServletResponse response) {
+	public CipherResponseDTO<ShiftDTO> encrypt(@Valid ShiftRequestDTO shiftRequestDTO,  BindingResult bindingResult) {
 
-		checkForErrors(shiftBindingResult, plainTextBindingResult);
+		checkForErrors(bindingResult);
 
-		CipherTextDTO cipherTextDTO = shiftCipherService.encrypt(shiftDTO, plainTextDTO);
-
-		return cipherTextDTO;
+		Logger logger = new CipherLogger();
+		
+		TextDTO cipherText = shiftCipherService.encrypt(shiftRequestDTO.getCipher(), shiftRequestDTO.getText(), logger);
+		
+		CipherResponseDTO<ShiftDTO> responseDTO = new CipherResponseDTO<>();
+		responseDTO.setCipher(shiftRequestDTO.getCipher());
+		responseDTO.setText(cipherText);
+		responseDTO.setLog(logger.toString());
+		
+		return responseDTO;
 	}
 
 	@Override
-	@RequestMapping(value = "/decrypt", method = RequestMethod.POST)
+	@RequestMapping(value = "/decrypt", method = RequestMethod.GET)
 	@ResponseBody
-	public PlainTextDTO decrypt(@Valid ShiftDTO shiftDTO, BindingResult shiftBindingResult, @Valid CipherTextDTO cipherTextDTO,
-			BindingResult cipherTextBindingResult, HttpServletRequest request, HttpServletResponse response) {
+	public CipherResponseDTO<ShiftDTO> decrypt(@Valid ShiftRequestDTO shiftRequestDTO,  BindingResult bindingResult) {
 
-		checkForErrors(shiftBindingResult, cipherTextBindingResult);
+		checkForErrors(bindingResult);
+
+		Logger logger = new CipherLogger();
 		
-		PlainTextDTO plainTextDTO = shiftCipherService.decrypt(shiftDTO, cipherTextDTO);
+		TextDTO plainText = shiftCipherService.decrypt(shiftRequestDTO.getCipher(), shiftRequestDTO.getText(), logger);
+		
+		CipherResponseDTO<ShiftDTO> responseDTO = new CipherResponseDTO<>();
+		responseDTO.setCipher(shiftRequestDTO.getCipher());
+		responseDTO.setText(plainText);
+		responseDTO.setLog(logger.toString());
+		
+		return responseDTO;
 
-		return plainTextDTO;
 	}
 	
-	@RequestMapping(value = "/autodecrypt", method = RequestMethod.POST)
+	@RequestMapping(value = "/autodecrypt", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> autodecrypt(@Valid CipherTextDTO cipherTextDTO,	BindingResult cipherTextBindingResult,
-			HttpServletRequest request, HttpServletResponse response) {
+	public CipherResponseDTO<ShiftDTO> autodecrypt(@Valid TextDTO cipherText, BindingResult cipherTextBindingResult) {
 
 		checkForErrors(cipherTextBindingResult);
 		
-		ShiftDTO shiftDTO = shiftCipherService.autoDecrypt(cipherTextDTO);
-		PlainTextDTO plainTextDTO = shiftCipherService.decrypt(shiftDTO, cipherTextDTO);
+		Logger logger = new CipherLogger();
 		
-		Map<String, Object> returnedMap = new HashMap<String, Object>(2);
-		returnedMap.put("key", shiftDTO);
-		returnedMap.put("plainText", plainTextDTO);
+		ShiftDTO shiftDTO = shiftCipherService.autoDecrypt(cipherText, logger);
+		TextDTO plainText = shiftCipherService.decrypt(shiftDTO, cipherText, logger);
+
+		CipherResponseDTO<ShiftDTO> responseDTO = new CipherResponseDTO<>();
+		responseDTO.setCipher(shiftDTO);
+		responseDTO.setText(plainText);
+		responseDTO.setLog(logger.toString());
 		
-		return returnedMap;
+		return responseDTO;
 	}
+
 	
 
 }

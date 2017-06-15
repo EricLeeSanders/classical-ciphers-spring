@@ -8,6 +8,7 @@ import java.util.TreeSet;
 
 import com.ericleesanders.classicalciphers.web.cipher.cryptanalyses.FrequencyTest;
 import com.ericleesanders.classicalciphers.web.cipher.util.CipherUtil;
+import com.ericleesanders.classicalciphers.web.log.Logger;
 
 /**
  * Shift Cipher Class. Can perform Shift encryption, decryption, and auto
@@ -25,9 +26,13 @@ public class ShiftCipher {
 	 * 
 	 * @param plainText - Text that is to be encrypted
 	 * @param shiftAmount - Integer 1-26 to shift
+	 * @param logger
 	 * @return String - The encrypted text
 	 */
-	public static String encrypt(String plainText, int shiftAmount) {
+	public static String encrypt(String plainText, int shiftAmount, Logger logger) {
+		
+		logger.addLine("Beginning shift encryption...");
+		logger.addLine("Shift amount: " + shiftAmount);
 		
 		List<Character> plainTextList = CipherUtil.convertStringToCharacterList(plainText);
 		List<Character> cipherTextList = new ArrayList<Character>();
@@ -43,6 +48,9 @@ public class ShiftCipher {
 		
 		String cipherText = CipherUtil.convertCharacterListToString(cipherTextList);
 		
+		logger.addLine("Shift encryption complete");
+		logger.addLine("Encrypted text: " + cipherText);
+		
 		return cipherText;
 	}
 
@@ -51,9 +59,13 @@ public class ShiftCipher {
 	 * 
 	 * @param cipherText - Text that is to be decrypted
 	 * @param shiftAmount - Integer 1-26 to shift
+	 * @param logger
 	 * @return String - the decrypted text
 	 */
-	public static String decrypt(String cipherText, int shiftAmount) {
+	public static String decrypt(String cipherText, int shiftAmount, Logger logger) {
+		
+		logger.addLine("Beginning shift decryption...");
+		logger.addLine("Shift amount: " + shiftAmount);
 		
 		List<Character> cipherTextList = CipherUtil.convertStringToCharacterList(cipherText);
 		List<Character> plainTextList = new ArrayList<Character>();
@@ -68,6 +80,9 @@ public class ShiftCipher {
 		
 		String plainText = CipherUtil.convertCharacterListToString(plainTextList);
 		
+		logger.addLine("Shift decryption complete");
+		logger.addLine("Decrypted text: " + plainText);
+		
 		return plainText;
 	}
 
@@ -75,9 +90,12 @@ public class ShiftCipher {
 	 * Auto Decrypts a Shift cipher
 	 * 
 	 * @param cipherText
+	 * @param logger
 	 * @return int - shift amount
 	 */
-	public static int autoDecrypt(String cipherText) {
+	public static int autoDecrypt(String cipherText, Logger logger) {
+		
+		logger.addLine("Beginning shift auto decryption...");
 		List<Character> cipherTextList = CipherUtil.convertStringToCharacterList(cipherText);
 		Set<FrequencyNode> freqNodeSet = new TreeSet<FrequencyNode>();
 		// shift the array by all 26 possibilities to find which matches closest
@@ -88,11 +106,11 @@ public class ShiftCipher {
 			freqNodeSet.add(fn);
 		}
 		
+		logger.addLine("Possible shifts ordered by their difference to English: ");
 		Iterator<FrequencyNode> iter = freqNodeSet.iterator();
 		while(iter.hasNext()){
-		    System.out.print(iter.next() + ", ");
+		    logger.addLine(iter.next());
 		}
-		System.out.println();
 		
 		return freqNodeSet.iterator().next().getShift();
 

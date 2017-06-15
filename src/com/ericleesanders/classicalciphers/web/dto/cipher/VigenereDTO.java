@@ -6,7 +6,7 @@ public class VigenereDTO {
 
 	@CheckAlphabetic(message="Key must not be empty and must be alphabetic.")
 	private String vigenereKey;
-
+	
 	public VigenereDTO(){}
 	
 	public VigenereDTO(String vigenereKey) {
@@ -20,7 +20,7 @@ public class VigenereDTO {
 	public void setVigenereKey(String vigenereKey) {
 		this.vigenereKey = vigenereKey;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "VigenereDTO [vigenereKey=" + vigenereKey + "]";

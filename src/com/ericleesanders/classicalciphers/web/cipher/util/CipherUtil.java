@@ -44,7 +44,7 @@ public class CipherUtil {
 	 *
 	 * @return Map<Character, Double> returns a map of the frequency for each character.
 	 */
-	public static Map<Character, Double> getCharFrequencyCount(Map<Character, Integer> charOccurrences, int textLength) {
+	public static Map<Character, Double> getCharFrequency(Map<Character, Integer> charOccurrences, int textLength) {
 		
 		Map<Character, Double> charFreq = new HashMap<Character, Double>();
 		for(Character c : charOccurrences.keySet()){

@@ -4,40 +4,43 @@ package com.ericleesanders.classicalciphers.web.service.impl;
 import org.springframework.stereotype.Service;
 
 import com.ericleesanders.classicalciphers.web.cipher.ShiftCipher;
-import com.ericleesanders.classicalciphers.web.dto.cipher.CipherTextDTO;
-import com.ericleesanders.classicalciphers.web.dto.cipher.PlainTextDTO;
 import com.ericleesanders.classicalciphers.web.dto.cipher.ShiftDTO;
+import com.ericleesanders.classicalciphers.web.dto.cipher.TextDTO;
+import com.ericleesanders.classicalciphers.web.log.Logger;
 import com.ericleesanders.classicalciphers.web.service.CipherService;
 
 @Service("shiftCipherService")
 public class ShiftCipherService implements CipherService<ShiftDTO> {
 
 	@Override
-	public CipherTextDTO encrypt(ShiftDTO shiftDTO, PlainTextDTO plainTextDTO){
+	public TextDTO encrypt(ShiftDTO shiftDTO, TextDTO plainText, Logger logger){
 		
-		String cipherText = ShiftCipher.encrypt(plainTextDTO.getPlainText(), shiftDTO.getShiftAmount());
+		String cipherText = ShiftCipher.encrypt(plainText.getText(), shiftDTO.getShiftAmount(), logger);
 		
-		CipherTextDTO cipherTextDTO = new CipherTextDTO(cipherText);
+		TextDTO cipherTextDTO = new TextDTO(cipherText);
 				
 		return cipherTextDTO;
 	}
 	
 	@Override
-	public PlainTextDTO decrypt(ShiftDTO shiftDTO, CipherTextDTO cipherTextDTO){
+	public TextDTO decrypt(ShiftDTO shiftDTO, TextDTO cipherText, Logger logger){
 		
-		String plainText = ShiftCipher.decrypt(cipherTextDTO.getCipherText(), shiftDTO.getShiftAmount());
+		String plainText = ShiftCipher.decrypt(cipherText.getText(), shiftDTO.getShiftAmount(), logger);
 		
-		PlainTextDTO plainTextDTO = new PlainTextDTO(plainText);
+		TextDTO plainTextDTO = new TextDTO(plainText);
 				
 		return plainTextDTO;
 	}
 	
 	@Override
-	public ShiftDTO autoDecrypt(CipherTextDTO cipherTextDTO){
+	public ShiftDTO autoDecrypt(TextDTO cipherText, Logger logger){
 		
-		int shiftAmount = ShiftCipher.autoDecrypt(cipherTextDTO.getCipherText());
 		
-		ShiftDTO shiftDTO = new ShiftDTO(shiftAmount);
+		ShiftDTO shiftDTO = new ShiftDTO();
+				
+		int shiftAmount = ShiftCipher.autoDecrypt(cipherText.getText(), logger);
+		
+		shiftDTO.setShiftAmount(shiftAmount);
 				
 		return shiftDTO;
 	}

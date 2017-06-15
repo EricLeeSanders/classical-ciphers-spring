@@ -4,6 +4,7 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.ericleesanders.classicalciphers.web.cipher.AffineCipher;
 import com.ericleesanders.classicalciphers.web.cipher.ShiftCipher;
@@ -12,7 +13,7 @@ import com.ericleesanders.classicalciphers.web.cipher.ShiftCipher;
 public class IndexController {
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value="/")
+	@RequestMapping(value="/", method = RequestMethod.GET)
 	public String getCipher(Model model){
 				
 		JSONObject shiftValidShifts = new JSONObject();

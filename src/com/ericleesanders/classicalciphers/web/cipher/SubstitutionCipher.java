@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.ericleesanders.classicalciphers.web.cipher.util.CipherUtil;
+import com.ericleesanders.classicalciphers.web.log.Logger;
 
 public class SubstitutionCipher {
 
@@ -19,12 +20,17 @@ public class SubstitutionCipher {
 	 * 
 	 * @param plainText
 	 * @param key
+	 * @param logger
 	 * @return String - The encrypted text
 	 */
-	public static String encrypt(String plainText, String key) {
+	public static String encrypt(String plainText, String key, Logger logger) {
+		
+		logger.addLine("Beginning substitution encryption...");
+		logger.addLine("key: " + key);
 
 		List<Character> plainTextList = CipherUtil.convertStringToCharacterList(plainText);
 		List<Character> cipherAlphabet = createCipherAlphabet(key);
+		logger.addLine("Cipher alphabet: " + cipherAlphabet);
 		List<Character> cipherTextList = new ArrayList<Character>();
 		
 		for (int i = 0; i < plainTextList.size(); i++) {
@@ -33,6 +39,10 @@ public class SubstitutionCipher {
 		}
 
 		String cipherText = CipherUtil.convertCharacterListToString(cipherTextList);
+		
+		logger.addLine("Substitution encryption complete");
+		logger.addLine("Encrypted text: " + cipherText);
+		
 		return cipherText;
 	}
 
@@ -41,21 +51,30 @@ public class SubstitutionCipher {
 	 * 
 	 * @param cipherText
 	 * @param key
+	 * @param logger
 	 * @return String - the decrypted text
 	 */
-	public static String decrypt(String cipherText, String key) {
+	public static String decrypt(String cipherText, String key, Logger logger) {
+		
+		logger.addLine("Beginning substitution decryption...");
+		logger.addLine("key: " + key);
 		
 		List<Character> cipherTextList = CipherUtil.convertStringToCharacterList(cipherText);
 		List<Character> englishAlphabet = CipherUtil.convertStringToCharacterList("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-		String cipherString = CipherUtil.convertCharacterListToString(createCipherAlphabet(key));
+		String cipherAlphabet = CipherUtil.convertCharacterListToString(createCipherAlphabet(key));
+		logger.addLine("Cipher alphabet: " + cipherAlphabet);
 		List<Character> plainTextList = new ArrayList<Character>();
 		
 		for (int i = 0; i < cipherTextList.size(); i++) {
-			int pos = cipherString.indexOf(cipherTextList.get(i));
+			int pos = cipherAlphabet.indexOf(cipherTextList.get(i));
 			plainTextList.add(englishAlphabet.get(pos));
 		}
 
 		String plainText = CipherUtil.convertCharacterListToString(plainTextList);
+		
+		logger.addLine("Substitution decryption complete");
+		logger.addLine("Decrypted text: " + plainText);
+		
 		return plainText;
 	}
 	
@@ -79,8 +98,6 @@ public class SubstitutionCipher {
 				substitutionAlphabet.add(letter);	
 			}
 		}
-		
-		System.out.println(substitutionAlphabet);
 		
 		List<Character> subAlphabetList = new ArrayList<Character>(substitutionAlphabet);
 		
