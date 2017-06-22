@@ -91,7 +91,7 @@ public class ShiftCipher {
 	 * 
 	 * @param cipherText
 	 * @param logger
-	 * @return int - shift amount
+	 * @return int - shift amount for decryption
 	 */
 	public static int autoDecrypt(String cipherText, Logger logger) {
 		

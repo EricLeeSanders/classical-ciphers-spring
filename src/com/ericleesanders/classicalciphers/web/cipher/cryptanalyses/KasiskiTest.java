@@ -2,9 +2,11 @@ package com.ericleesanders.classicalciphers.web.cipher.cryptanalyses;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.ericleesanders.classicalciphers.web.cipher.util.CipherUtil;
 import com.ericleesanders.classicalciphers.web.log.Logger;
@@ -15,15 +17,15 @@ public class KasiskiTest {
 	private static final float MIN_NUM_OF_OCCURRENCES_FACTOR = 0.75f;
 	
 	/**
-	 * Performs the Kasiski test for auto decryption
+	 * Performs the Kasiski Test on a given list of characters.
 	 * 
 	 * @param cipherText
 	 * @param logger
-	 * @return List<Integer> - possible key lengths
+	 * @return Set<Integer> - possible key lengths
 	 */
-	public static List<Integer> kasiskiTest(String cipherText, Logger logger) {
+	public static Set<Integer> kasiskiTest(String cipherText, Logger logger) {
 		
-		List<Integer> keyLengths = findPossibleKeywordLengths(cipherText, logger);
+		Set<Integer> keyLengths = findPossibleKeywordLengths(cipherText, logger);
 		return keyLengths;
 	}
 	
@@ -33,7 +35,7 @@ public class KasiskiTest {
 	 * @param logger
 	 * @return
 	 */
-	public static List<Integer> findPossibleKeywordLengths(String cipherText, Logger logger) {
+	public static Set<Integer> findPossibleKeywordLengths(String cipherText, Logger logger) {
 		
 		//Key = factor, value = num of occurrences
 		Map<Integer, Integer> factorOccurrences = new HashMap<Integer, Integer>();
@@ -71,9 +73,9 @@ public class KasiskiTest {
 			}
 		}
 		
-		// Return a blank array if the we didn't find any repetitions
+		// Return an empty set if the we didn't find any repetitions
 		if(factorOccurrences.isEmpty()){
-			return new ArrayList<Integer>();
+			return new HashSet<Integer>();
 		}
 	
 		// Sort the map by value
@@ -86,7 +88,7 @@ public class KasiskiTest {
 		Integer mostCommonFactor = factorsOrdered.get(0);
 		Integer mostCommonFactorOccurrence = factorOccurrences.get(mostCommonFactor);
 		
-		List<Integer> possibleKeywordLengths = new ArrayList<Integer>();
+		Set<Integer> possibleKeywordLengths = new HashSet<Integer>();
 		// Add all factors that occurred at least mostCommonFactorOccurrences * MIN_NUM_OF_OCCURRENCES_FACTOR;
 		float minNumOfOccurrencesNeeded = mostCommonFactorOccurrence * MIN_NUM_OF_OCCURRENCES_FACTOR;
 		

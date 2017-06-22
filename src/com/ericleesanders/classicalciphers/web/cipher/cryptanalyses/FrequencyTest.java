@@ -34,7 +34,7 @@ public class FrequencyTest {
 	 * @return double - sum of difference
 	 */
 	public static double frequencyTest(List<Character> cipherText, int shiftAmount) {
-		System.out.println("shiftamount=" + shiftAmount);
+
 		List<Character> shiftedCipherText = new ArrayList<Character>();
 
 		for (int i = 0; i < cipherText.size(); i++) {
@@ -68,25 +68,20 @@ public class FrequencyTest {
 		
 		double sum = 0;
 		for(Character letter : ENGLISH_FREQ_MAP.keySet()){
-			//System.out.println("Letter: " + letter);
+			
 			Double englishFreq = ENGLISH_FREQ_MAP.get(letter);
 			Double cipherFreq = cipherFreqCount.get(letter);
-			//System.out.println("englishFreq: " + englishFreq);
+			
 			if(cipherFreq == null){
 				cipherFreq = 0.00;
 			}
-			
-			//System.out.println("cipherFreq: " + cipherFreq);
+
 			double difference = cipherFreq - englishFreq;
-			//System.out.println("difference: " + difference);
-			//System.out.println("adding: " + Math.pow(difference, 2));
+
 			sum += Math.pow(difference, 2);
 		}
-	
-		System.out.println("sum= " + sum);
-		double distance = Math.sqrt(sum);
 
-		System.out.println("distance =" + distance);
+		double distance = Math.sqrt(sum);
 		
 		return distance;
 	}

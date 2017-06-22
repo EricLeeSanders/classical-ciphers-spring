@@ -12,10 +12,27 @@ import com.ericleesanders.classicalciphers.web.exception.InvalidRequestException
 
 public interface CipherController<R extends CipherRequestDTO<?>, Cipher> {
 
+	/**
+	 * Encrypt a text message.
+	 * 
+	 * @param cipherRequestDTO
+	 * @param bindingResult
+	 * @return
+	 */
 	CipherResponseDTO<Cipher> encrypt(R cipherRequestDTO, BindingResult bindingResult);
 	
+	/**
+	 * Decrypt a text message.
+	 * @param cipherRequestDTO
+	 * @param bindingResult
+	 * @return
+	 */
 	CipherResponseDTO<Cipher> decrypt(R cipherRequestDTO, BindingResult bindingResult);
 	
+	/**
+	 * Checks for errors given 1 or many BindingResults
+	 * @param bindingResults
+	 */
 	default public void checkForErrors(BindingResult... bindingResults){
 		
 		List<Errors> errors = new ArrayList<Errors>();

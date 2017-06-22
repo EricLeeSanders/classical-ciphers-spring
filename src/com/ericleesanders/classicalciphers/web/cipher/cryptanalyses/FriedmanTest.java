@@ -11,7 +11,7 @@ public class FriedmanTest {
 	private static final double IC_LOWER_BOUND = 0.0385;
 	
 	/**
-	 * Performs the Friedman test
+	 * Performs the Friedman Test on a given list of characters.
 	 * 
 	 * @param cipherText
 	 * @return double - calculated key length
@@ -27,7 +27,7 @@ public class FriedmanTest {
 	 * letter(i)-1 / text length * text length-1
 	 * 
 	 * @param cipherText
-	 * @return
+	 * @return index of coincidence
 	 */
 	private static double calculateIC(List<Character> cipherText) {
 		

@@ -2,6 +2,7 @@ package com.ericleesanders.classicalciphers.web.cipher;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.ericleesanders.classicalciphers.web.cipher.cryptanalyses.FriedmanTest;
 import com.ericleesanders.classicalciphers.web.cipher.cryptanalyses.KasiskiTest;
@@ -118,7 +119,7 @@ public class VigenereCipher {
 		int signatureTestKeyLength = SignatureTest.signatureTest(cipherTextList, (int) friedmanKeyLength * 2, logger);
 		logger.addLine("Signature test best key length guess: " + signatureTestKeyLength);
 		
-		List<Integer> kasiskiKeyLengths = KasiskiTest.kasiskiTest(cipherText, logger);
+		Set<Integer> kasiskiKeyLengths = KasiskiTest.kasiskiTest(cipherText, logger);
 		logger.addLine("Kasiski test possible key lengths: " + kasiskiKeyLengths);
 		
 		int keyLength = 1;
@@ -144,23 +145,20 @@ public class VigenereCipher {
 	 * @param kasiskiGuess
 	 * @return
 	 */
-	private static int determineKeywordLength(int signatureTestGuess, List<Integer> kasiskiGuess){
+	private static int determineKeywordLength(int signatureTestGuess, Set<Integer> kasiskiGuess){
 		
-		if(kasiskiGuess.isEmpty()){
-			return signatureTestGuess;
-		}
-		
-		// find smallest distance between kasiskiKey and signatureTestGuess
+		// find smallest distance between each Kasiski guess and Signature Test guess
 		double min = Integer.MAX_VALUE;
-		int smallestPos = 0;
-		for (int i = 0; i < kasiskiGuess.size(); i++) {
-			double diff = Math.abs((double) kasiskiGuess.get(i) - signatureTestGuess);
-			if (diff < min) {
-				smallestPos = i;
+		int bestGuess = signatureTestGuess;
+		for(Integer possibleLength : kasiskiGuess){
+			double diff = Math.abs((double) possibleLength - signatureTestGuess);
+			if(diff < min){
 				min = diff;
+				bestGuess = possibleLength;
 			}
 		}
-		return kasiskiGuess.get(smallestPos);
+
+		return bestGuess;
 	}
 	
 	/**

@@ -10,7 +10,14 @@ import com.ericleesanders.classicalciphers.web.log.Logger;
 
 public class SignatureTest {
 	
-
+	/**
+	 * Performs the Signature Test on a given list of characters.
+	 * 
+	 * @param cipherText
+	 * @param keyLengthUpperBound
+	 * @param logger
+	 * @return
+	 */
 	public static int signatureTest(List<Character> cipherText, int keyLengthUpperBound, Logger logger){
 		
 		List<Double> keyLengthProbabilities = findKeyLengthProbabilities(cipherText, keyLengthUpperBound);
