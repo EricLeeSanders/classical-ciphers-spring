@@ -59,7 +59,6 @@ $(document).ready(function() {
 	    sanitizeTextInputs();
 	    	    
 	    var jqxhr = $.get(buildCipherPostURL(), $form.serialize(), function(response) {
-	    	console.log(response);
 	    	removeErrors();
 			if(cipherDirection === "Encrypt"){
 				$('#cipher-text').val(response.text.text);
@@ -75,7 +74,6 @@ $(document).ready(function() {
 			}
 			$("#log-output").val(response.log);
 	    }).fail(function(errors) {
-	    	console.log(errors);
 			$('.errors').empty();
 	    	//Remove hasError from all elements
 	    	$('.has-error').removeClass('has-error');
