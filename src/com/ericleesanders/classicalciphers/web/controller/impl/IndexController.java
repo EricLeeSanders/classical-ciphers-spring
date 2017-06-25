@@ -1,7 +1,5 @@
 package com.ericleesanders.classicalciphers.web.controller.impl;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +14,7 @@ public class IndexController {
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/", method = RequestMethod.GET)
-	public String getCipher(Model model, HttpServletRequest request){
+	public String getCipher(Model model){
 				
 		JSONObject shiftValidShifts = new JSONObject();
 		
