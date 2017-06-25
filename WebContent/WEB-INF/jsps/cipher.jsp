@@ -23,6 +23,9 @@
               	<a id="githubpage" href="https://github.com/EricLeeSanders/classical-ciphers-spring">
 		            <img src="${pageContext.request.contextPath}/assets/imgs/GitHub-Mark-Light-64px.png" alt="GitHub" height="42">
 		        </a>
+		        <h2>
+		        	<label>Classical Ciphers</label>
+		        </h2>
             	<h2>
 					<label id="cipherTitle">Shift</label>
 				</h2>
