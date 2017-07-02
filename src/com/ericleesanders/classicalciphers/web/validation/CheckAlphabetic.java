@@ -14,12 +14,11 @@ import javax.validation.Payload;
 @Constraint(validatedBy = CheckAlphabeticValidator.class)
 @Documented
 public @interface CheckAlphabetic {
-	
-	String message() default "Text must be alphabetic.";
-	
-	Class<?>[] groups() default {};
-	
-	Class<? extends Payload>[] payload() default {};
 
+    String message() default "Text must be alphabetic.";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 
 }

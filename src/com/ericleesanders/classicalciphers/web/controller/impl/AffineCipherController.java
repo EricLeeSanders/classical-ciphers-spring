@@ -22,45 +22,47 @@ import com.ericleesanders.classicalciphers.web.service.CipherService;
 @RequestMapping(value = "/affine")
 public class AffineCipherController implements CipherController<AffineRequestDTO, AffineDTO> {
 
-	@Autowired
-	private CipherService<AffineDTO> affineCipherService;
+    @Autowired
+    private CipherService<AffineDTO> affineCipherService;
 
-	@Override
-	@RequestMapping(value = "/encrypt", method = RequestMethod.GET)
-	@ResponseBody
-	public CipherResponseDTO<AffineDTO> encrypt(@Valid AffineRequestDTO affineRequestDTO, BindingResult bindingResult) {
+    @Override
+    @RequestMapping(value = "/encrypt", method = RequestMethod.GET)
+    @ResponseBody
+    public CipherResponseDTO<AffineDTO> encrypt(@Valid AffineRequestDTO affineRequestDTO, BindingResult bindingResult) {
 
-		checkForErrors(bindingResult);
-		
-		Logger logger = new CipherLogger();
-		
-		TextDTO cipherText = affineCipherService.encrypt(affineRequestDTO.getCipher(), affineRequestDTO.getText(), logger);
-		
-		CipherResponseDTO<AffineDTO> responseDTO = new CipherResponseDTO<>();
-		responseDTO.setCipher(affineRequestDTO.getCipher());
-		responseDTO.setText(cipherText);
-		responseDTO.setLog(logger.toString());
-		
-		return responseDTO;
-	}
+        checkForErrors(bindingResult);
 
-	@Override
-	@RequestMapping(value = "/decrypt", method = RequestMethod.GET)
-	@ResponseBody
-	public CipherResponseDTO<AffineDTO> decrypt(@Valid AffineRequestDTO affineRequestDTO, BindingResult bindingResult) {
+        Logger logger = new CipherLogger();
 
-		checkForErrors(bindingResult);
+        TextDTO cipherText = affineCipherService.encrypt(affineRequestDTO.getCipher(), affineRequestDTO.getText(),
+                logger);
 
-		Logger logger = new CipherLogger();
+        CipherResponseDTO<AffineDTO> responseDTO = new CipherResponseDTO<>();
+        responseDTO.setCipher(affineRequestDTO.getCipher());
+        responseDTO.setText(cipherText);
+        responseDTO.setLog(logger.toString());
 
-		TextDTO plainText = affineCipherService.decrypt(affineRequestDTO.getCipher(), affineRequestDTO.getText(), logger);
-		
-		CipherResponseDTO<AffineDTO> responseDTO = new CipherResponseDTO<>();
-		responseDTO.setCipher(affineRequestDTO.getCipher());
-		responseDTO.setText(plainText);
-		responseDTO.setLog(logger.toString());
+        return responseDTO;
+    }
 
-		return responseDTO;
-	}
+    @Override
+    @RequestMapping(value = "/decrypt", method = RequestMethod.GET)
+    @ResponseBody
+    public CipherResponseDTO<AffineDTO> decrypt(@Valid AffineRequestDTO affineRequestDTO, BindingResult bindingResult) {
+
+        checkForErrors(bindingResult);
+
+        Logger logger = new CipherLogger();
+
+        TextDTO plainText = affineCipherService.decrypt(affineRequestDTO.getCipher(), affineRequestDTO.getText(),
+                logger);
+
+        CipherResponseDTO<AffineDTO> responseDTO = new CipherResponseDTO<>();
+        responseDTO.setCipher(affineRequestDTO.getCipher());
+        responseDTO.setText(plainText);
+        responseDTO.setLog(logger.toString());
+
+        return responseDTO;
+    }
 
 }

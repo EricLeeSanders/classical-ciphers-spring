@@ -9,32 +9,34 @@ import com.ericleesanders.classicalciphers.web.log.Logger;
 import com.ericleesanders.classicalciphers.web.service.CipherService;
 
 @Service("affineCipherService")
-public class AffineCipherService implements CipherService<AffineDTO>{
+public class AffineCipherService implements CipherService<AffineDTO> {
 
-	@Override
-	public TextDTO encrypt(AffineDTO affineDTO, TextDTO plainText, Logger logger){
-		
-		String cipherText = AffineCipher.encrypt(plainText.getText(), affineDTO.getShiftAmountA(), affineDTO.getShiftAmountB(), logger);
-		
-		TextDTO cipherTextDTO = new TextDTO(cipherText);
-				
-		return cipherTextDTO;
-	}
-	
-	@Override
-	public TextDTO decrypt(AffineDTO affineDTO, TextDTO cipherText, Logger logger){
-		
-		String plainText = AffineCipher.decrypt(cipherText.getText(), affineDTO.getShiftAmountA(), affineDTO.getShiftAmountB(), logger);
-		
-		TextDTO plainTextDTO = new TextDTO(plainText);
-				
-		return plainTextDTO;
-	}
-	
-	@Override
-	public AffineDTO autoDecrypt(TextDTO cipherText, Logger logger) {
+    @Override
+    public TextDTO encrypt(AffineDTO affineDTO, TextDTO plainText, Logger logger) {
 
-		throw new UnsupportedOperationException();
-	}
+        String cipherText = AffineCipher.encrypt(plainText.getText(), affineDTO.getShiftAmountA(),
+                affineDTO.getShiftAmountB(), logger);
+
+        TextDTO cipherTextDTO = new TextDTO(cipherText);
+
+        return cipherTextDTO;
+    }
+
+    @Override
+    public TextDTO decrypt(AffineDTO affineDTO, TextDTO cipherText, Logger logger) {
+
+        String plainText = AffineCipher.decrypt(cipherText.getText(), affineDTO.getShiftAmountA(),
+                affineDTO.getShiftAmountB(), logger);
+
+        TextDTO plainTextDTO = new TextDTO(plainText);
+
+        return plainTextDTO;
+    }
+
+    @Override
+    public AffineDTO autoDecrypt(TextDTO cipherText, Logger logger) {
+
+        throw new UnsupportedOperationException();
+    }
 
 }

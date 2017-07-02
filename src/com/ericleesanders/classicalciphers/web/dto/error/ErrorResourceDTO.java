@@ -9,24 +9,41 @@ public class ErrorResourceDTO {
     private String message;
     private List<FieldErrorResourceDTO> fieldErrors;
 
-    public ErrorResourceDTO() { }
+    public ErrorResourceDTO() {
+    }
 
     public ErrorResourceDTO(String code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public String getCode() { return code; }
+    public String getCode() {
 
-    public void setCode(String code) { this.code = code; }
+        return code;
+    }
 
-    public String getMessage() { return message; }
+    public void setCode(String code) {
 
-    public void setMessage(String message) { this.message = message; }
+        this.code = code;
+    }
 
-    public List<FieldErrorResourceDTO> getFieldErrors() { return fieldErrors; }
+    public String getMessage() {
+
+        return message;
+    }
+
+    public void setMessage(String message) {
+
+        this.message = message;
+    }
+
+    public List<FieldErrorResourceDTO> getFieldErrors() {
+
+        return fieldErrors;
+    }
 
     public void setFieldErrors(List<FieldErrorResourceDTO> fieldErrors) {
+
         this.fieldErrors = fieldErrors;
     }
 }
