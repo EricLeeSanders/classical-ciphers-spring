@@ -20,22 +20,23 @@ import com.ericleesanders.classicalciphers.web.exception.InvalidRequestException
 
 @ControllerAdvice
 public class CipherExceptionHandler extends ResponseEntityExceptionHandler {
-	
+
     @ExceptionHandler({ InvalidRequestException.class })
     protected ResponseEntity<Object> handleInvalidRequest(RuntimeException e, WebRequest request) {
+
         InvalidRequestException ire = (InvalidRequestException) e;
         List<FieldErrorResourceDTO> fieldErrorResources = new ArrayList<>();
 
-        for(Errors err : ire.getErrors()){
-	        List<FieldError> fieldErrors = err.getFieldErrors();
-	        for (FieldError fieldError : fieldErrors) {
-	            FieldErrorResourceDTO fieldErrorResource = new FieldErrorResourceDTO();
-	            fieldErrorResource.setResource(fieldError.getObjectName());
-	            fieldErrorResource.setField(fieldError.getField());
-	            fieldErrorResource.setCode(fieldError.getCode());
-	            fieldErrorResource.setMessage(fieldError.getDefaultMessage());
-	            fieldErrorResources.add(fieldErrorResource);
-	        }
+        for (Errors err : ire.getErrors()) {
+            List<FieldError> fieldErrors = err.getFieldErrors();
+            for (FieldError fieldError : fieldErrors) {
+                FieldErrorResourceDTO fieldErrorResource = new FieldErrorResourceDTO();
+                fieldErrorResource.setResource(fieldError.getObjectName());
+                fieldErrorResource.setField(fieldError.getField());
+                fieldErrorResource.setCode(fieldError.getCode());
+                fieldErrorResource.setMessage(fieldError.getDefaultMessage());
+                fieldErrorResources.add(fieldErrorResource);
+            }
         }
 
         ErrorResourceDTO error = new ErrorResourceDTO("InvalidRequest", ire.getMessage());

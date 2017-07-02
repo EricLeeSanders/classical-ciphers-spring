@@ -14,12 +14,12 @@ import javax.validation.Payload;
 @Constraint(validatedBy = CheckRelativelyPrimeValidator.class)
 @Documented
 public @interface CheckRelativelyPrime {
-	
-	String message() default "Shift must be relatively prime.";
-	
-	Class<?>[] groups() default {};
-	
-	Class<? extends Payload>[] payload() default {};
 
-	int stationaryNumber();
+    String message() default "Shift must be relatively prime.";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
+
+    int stationaryNumber();
 }

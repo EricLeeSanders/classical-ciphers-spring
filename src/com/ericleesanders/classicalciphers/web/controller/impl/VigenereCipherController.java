@@ -20,68 +20,72 @@ import com.ericleesanders.classicalciphers.web.service.CipherService;
 
 @Controller
 @RequestMapping(value = "/vigenere")
-public class VigenereCipherController implements CipherController<VigenereRequestDTO, VigenereDTO>{
+public class VigenereCipherController implements CipherController<VigenereRequestDTO, VigenereDTO> {
 
-	@Autowired
-	private CipherService<VigenereDTO> vigenereCipherService;
+    @Autowired
+    private CipherService<VigenereDTO> vigenereCipherService;
 
-	@Override
-	@RequestMapping(value = "/encrypt", method = RequestMethod.GET)
-	@ResponseBody
-	public CipherResponseDTO<VigenereDTO> encrypt(@Valid VigenereRequestDTO vigenereRequestDTO, BindingResult bindingResult) {
-		
-		checkForErrors(bindingResult);
+    @Override
+    @RequestMapping(value = "/encrypt", method = RequestMethod.GET)
+    @ResponseBody
+    public CipherResponseDTO<VigenereDTO> encrypt(@Valid VigenereRequestDTO vigenereRequestDTO,
+            BindingResult bindingResult) {
 
-		Logger logger = new CipherLogger();
-		
-		TextDTO cipherText = vigenereCipherService.encrypt(vigenereRequestDTO.getCipher(), vigenereRequestDTO.getText(), logger);
-		
-		CipherResponseDTO<VigenereDTO> responseDTO = new CipherResponseDTO<>();
-		responseDTO.setCipher(vigenereRequestDTO.getCipher());
-		responseDTO.setText(cipherText);
-		responseDTO.setLog(logger.toString());
-		
-		return responseDTO;
+        checkForErrors(bindingResult);
 
-	}
+        Logger logger = new CipherLogger();
 
-	@Override
-	@RequestMapping(value = "/decrypt", method = RequestMethod.GET)
-	@ResponseBody
-	public CipherResponseDTO<VigenereDTO> decrypt(@Valid VigenereRequestDTO vigenereRequestDTO, BindingResult bindingResult) {
-		
-		checkForErrors(bindingResult);
+        TextDTO cipherText = vigenereCipherService.encrypt(vigenereRequestDTO.getCipher(), vigenereRequestDTO.getText(),
+                logger);
 
-		Logger logger = new CipherLogger();
+        CipherResponseDTO<VigenereDTO> responseDTO = new CipherResponseDTO<>();
+        responseDTO.setCipher(vigenereRequestDTO.getCipher());
+        responseDTO.setText(cipherText);
+        responseDTO.setLog(logger.toString());
 
-		TextDTO plainText = vigenereCipherService.decrypt(vigenereRequestDTO.getCipher(), vigenereRequestDTO.getText(), logger);
-		
-		CipherResponseDTO<VigenereDTO> responseDTO = new CipherResponseDTO<>();
-		responseDTO.setCipher(vigenereRequestDTO.getCipher());
-		responseDTO.setText(plainText);
-		responseDTO.setLog(logger.toString());
+        return responseDTO;
 
-		return responseDTO;
-	}
-	
-	@RequestMapping(value = "/autodecrypt", method = RequestMethod.GET)
-	@ResponseBody
-	public CipherResponseDTO<VigenereDTO> autodecrypt(@Valid TextDTO cipherText, BindingResult cipherTextBindingResult) {
+    }
 
-		checkForErrors(cipherTextBindingResult);
-		
-		Logger logger = new CipherLogger();
-		
-		VigenereDTO vigenereDTO = vigenereCipherService.autoDecrypt(cipherText, logger);
-		TextDTO plainText = vigenereCipherService.decrypt(vigenereDTO, cipherText, logger);
+    @Override
+    @RequestMapping(value = "/decrypt", method = RequestMethod.GET)
+    @ResponseBody
+    public CipherResponseDTO<VigenereDTO> decrypt(@Valid VigenereRequestDTO vigenereRequestDTO,
+            BindingResult bindingResult) {
 
-		CipherResponseDTO<VigenereDTO> responseDTO = new CipherResponseDTO<>();
-		responseDTO.setCipher(vigenereDTO);
-		responseDTO.setText(plainText);
-		responseDTO.setLog(logger.toString());
-		
-		return responseDTO;
-	}
+        checkForErrors(bindingResult);
 
+        Logger logger = new CipherLogger();
+
+        TextDTO plainText = vigenereCipherService.decrypt(vigenereRequestDTO.getCipher(), vigenereRequestDTO.getText(),
+                logger);
+
+        CipherResponseDTO<VigenereDTO> responseDTO = new CipherResponseDTO<>();
+        responseDTO.setCipher(vigenereRequestDTO.getCipher());
+        responseDTO.setText(plainText);
+        responseDTO.setLog(logger.toString());
+
+        return responseDTO;
+    }
+
+    @RequestMapping(value = "/autodecrypt", method = RequestMethod.GET)
+    @ResponseBody
+    public CipherResponseDTO<VigenereDTO> autodecrypt(@Valid TextDTO cipherText,
+            BindingResult cipherTextBindingResult) {
+
+        checkForErrors(cipherTextBindingResult);
+
+        Logger logger = new CipherLogger();
+
+        VigenereDTO vigenereDTO = vigenereCipherService.autoDecrypt(cipherText, logger);
+        TextDTO plainText = vigenereCipherService.decrypt(vigenereDTO, cipherText, logger);
+
+        CipherResponseDTO<VigenereDTO> responseDTO = new CipherResponseDTO<>();
+        responseDTO.setCipher(vigenereDTO);
+        responseDTO.setText(plainText);
+        responseDTO.setLog(logger.toString());
+
+        return responseDTO;
+    }
 
 }

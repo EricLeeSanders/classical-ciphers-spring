@@ -7,7 +7,9 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Classical Cipher</title>
+	<link rel="shortcut icon" href="${pageContext.request.contextPath}/assets/imgs/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="${pageContext.request.contextPath}/assets/imgs/favicon.ico" type="image/x-icon">
+	<title>Classical Ciphers</title>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="${pageContext.request.contextPath}/assets/css/cipher.css" rel="stylesheet" type="text/css">
 	<script>var ctx = "${pageContext.request.contextPath}"</script>

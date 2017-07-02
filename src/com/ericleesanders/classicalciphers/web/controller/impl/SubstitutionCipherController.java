@@ -20,47 +20,51 @@ import com.ericleesanders.classicalciphers.web.service.CipherService;
 
 @Controller
 @RequestMapping(value = "/substitution")
-public class SubstitutionCipherController implements CipherController<SubstitutionRequestDTO, SubstitutionDTO>{
+public class SubstitutionCipherController implements CipherController<SubstitutionRequestDTO, SubstitutionDTO> {
 
-	@Autowired
-	private CipherService<SubstitutionDTO> substitutionCipherService;
-	
-	@Override
-	@RequestMapping(value = "/encrypt", method = RequestMethod.GET)
-	@ResponseBody
-	public CipherResponseDTO<SubstitutionDTO> encrypt(@Valid SubstitutionRequestDTO substitutionRequestDTO, BindingResult bindingResult) {
+    @Autowired
+    private CipherService<SubstitutionDTO> substitutionCipherService;
 
-		checkForErrors(bindingResult);
+    @Override
+    @RequestMapping(value = "/encrypt", method = RequestMethod.GET)
+    @ResponseBody
+    public CipherResponseDTO<SubstitutionDTO> encrypt(@Valid SubstitutionRequestDTO substitutionRequestDTO,
+            BindingResult bindingResult) {
 
-		Logger logger = new CipherLogger();
-		
-		TextDTO cipherText = substitutionCipherService.encrypt(substitutionRequestDTO.getCipher(), substitutionRequestDTO.getText(), logger);
-		
-		CipherResponseDTO<SubstitutionDTO> responseDTO = new CipherResponseDTO<>();
-		responseDTO.setCipher(substitutionRequestDTO.getCipher());
-		responseDTO.setText(cipherText);
-		responseDTO.setLog(logger.toString());
-		
-		return responseDTO;
-	}
+        checkForErrors(bindingResult);
 
-	@Override
-	@RequestMapping(value = "/decrypt", method = RequestMethod.GET)
-	@ResponseBody
-	public CipherResponseDTO<SubstitutionDTO> decrypt(@Valid SubstitutionRequestDTO substitutionRequestDTO, BindingResult bindingResult) {
-		
-		checkForErrors(bindingResult);
+        Logger logger = new CipherLogger();
 
-		Logger logger = new CipherLogger();
+        TextDTO cipherText = substitutionCipherService.encrypt(substitutionRequestDTO.getCipher(),
+                substitutionRequestDTO.getText(), logger);
 
-		TextDTO plainText = substitutionCipherService.decrypt(substitutionRequestDTO.getCipher(), substitutionRequestDTO.getText(), logger);
-		
-		CipherResponseDTO<SubstitutionDTO> responseDTO = new CipherResponseDTO<>();
-		responseDTO.setCipher(substitutionRequestDTO.getCipher());
-		responseDTO.setText(plainText);
-		responseDTO.setLog(logger.toString());
+        CipherResponseDTO<SubstitutionDTO> responseDTO = new CipherResponseDTO<>();
+        responseDTO.setCipher(substitutionRequestDTO.getCipher());
+        responseDTO.setText(cipherText);
+        responseDTO.setLog(logger.toString());
 
-		return responseDTO;
-	}
+        return responseDTO;
+    }
+
+    @Override
+    @RequestMapping(value = "/decrypt", method = RequestMethod.GET)
+    @ResponseBody
+    public CipherResponseDTO<SubstitutionDTO> decrypt(@Valid SubstitutionRequestDTO substitutionRequestDTO,
+            BindingResult bindingResult) {
+
+        checkForErrors(bindingResult);
+
+        Logger logger = new CipherLogger();
+
+        TextDTO plainText = substitutionCipherService.decrypt(substitutionRequestDTO.getCipher(),
+                substitutionRequestDTO.getText(), logger);
+
+        CipherResponseDTO<SubstitutionDTO> responseDTO = new CipherResponseDTO<>();
+        responseDTO.setCipher(substitutionRequestDTO.getCipher());
+        responseDTO.setText(plainText);
+        responseDTO.setLog(logger.toString());
+
+        return responseDTO;
+    }
 
 }

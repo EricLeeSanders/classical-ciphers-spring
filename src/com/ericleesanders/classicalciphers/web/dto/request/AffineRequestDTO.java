@@ -7,9 +7,10 @@ import com.ericleesanders.classicalciphers.web.dto.cipher.AffineDTO;
  * command object in the corresponding object. Without this (and directly using
  * the CipherRequestDTO<T> object on the controller) the request would fail
  * because of type erasure.
+ * 
  * @author esanders
  *
  */
-public class AffineRequestDTO extends CipherRequestDTO<AffineDTO>{
+public class AffineRequestDTO extends CipherRequestDTO<AffineDTO> {
 
 }

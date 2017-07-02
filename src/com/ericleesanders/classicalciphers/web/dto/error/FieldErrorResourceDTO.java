@@ -9,19 +9,43 @@ public class FieldErrorResourceDTO {
     private String code;
     private String message;
 
-    public String getResource() { return resource; }
+    public String getResource() {
 
-    public void setResource(String resource) { this.resource = resource; }
+        return resource;
+    }
 
-    public String getField() { return field; }
+    public void setResource(String resource) {
 
-    public void setField(String field) { this.field = field; }
+        this.resource = resource;
+    }
 
-    public String getCode() { return code; }
+    public String getField() {
 
-    public void setCode(String code) { this.code = code; }
+        return field;
+    }
 
-    public String getMessage() { return message; }
+    public void setField(String field) {
 
-    public void setMessage(String message) { this.message = message; }
+        this.field = field;
+    }
+
+    public String getCode() {
+
+        return code;
+    }
+
+    public void setCode(String code) {
+
+        this.code = code;
+    }
+
+    public String getMessage() {
+
+        return message;
+    }
+
+    public void setMessage(String message) {
+
+        this.message = message;
+    }
 }

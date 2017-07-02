@@ -27,12 +27,11 @@ body{
 	display:block;
 }
 
-a[href]{
+a[href] {
   text-decoration: none
 }
 
-/*  bhoechie tab */
-div.main-container{
+div.main-container {
   z-index: 10;
   background-color: lightgray;
   padding: 5px;
@@ -44,29 +43,29 @@ div.main-container{
   background-clip: padding-box;
 }
 
-#homepage{
+#homepage {
 	float: left;
 }
 
-#githubpage{
+#githubpage {
 	float: right;
 }
 
-#cipher-direction-buttons  > button.active, #cipher-type-buttons  > button.active{
+#cipher-direction-buttons > button.active, #cipher-type-buttons  > button.active {
   color: #ffffff;
-  background-color: #213D46;
+  background-color: #303e49;
 }
 
-#cipher-type-buttons  >button.active{
+#cipher-type-buttons > button.active {
   color: #ffffff;
-  background-color: #213D46;
+  background-color: #303e49;
 }
 
-#main-panel>h2{
+#main-panel > h2 {
   text-align: center;
 }
 
-#main-panel .row{
+#main-panel .row {
   text-align: center;
   margin-bottom: 15px;
 }
@@ -75,7 +74,7 @@ div.main-container{
 	color: #a94442;
 }
 
-.form-control:disabled{
+.form-control:disabled {
 	background-color: #BEBEBE;
 }
 
@@ -117,7 +116,7 @@ div.main-container{
 	transition: max-height .3s ease;
 }
 
-.hidden-content.show-content{
+.hidden-content.show-content {
 	max-height: 600px;
 	-webkit-transition: max-height 1s ease-in;
     -moz-transition: max-height 1s ease-in;
