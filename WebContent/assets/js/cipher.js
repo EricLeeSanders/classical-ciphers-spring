@@ -157,7 +157,7 @@ $(document)
         $cipherText.val($cipherText.val().toUpperCase());
         $cipherText.val($cipherText.val().replace(/[^A-Z]/g, ''));
 
-        var $keyInput = $('.active-key-panel textarea');
+        var $keyInput = $('.active-key-panel input');
         if ($keyInput.val()) {
           $keyInput.val($keyInput.val().toUpperCase());
           $keyInput.val($keyInput.val().replace(/[^A-Z]/g, ''));
